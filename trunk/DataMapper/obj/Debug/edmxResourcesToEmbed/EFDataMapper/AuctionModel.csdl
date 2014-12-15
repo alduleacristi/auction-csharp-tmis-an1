@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="AuctionModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="AuctionModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Roles" EntityType="AuctionModel.Role" />
+    <EntitySet Name="Users" EntityType="AuctionModel.User" />
+    <EntitySet Name="User_Role" EntityType="AuctionModel.User_Role" />
+    <AssociationSet Name="RoleUser_Role" Association="AuctionModel.RoleUser_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User_Role" EntitySet="User_Role" />
+    </AssociationSet>
+    <AssociationSet Name="UserUser_Role" Association="AuctionModel.UserUser_Role">
+      <End Role="User" EntitySet="Users" />
+      <End Role="User_Role" EntitySet="User_Role" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="IdRole" />
+    </Key>
+    <Property Name="IdRole" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="Single" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="IdUser" />
+    </Key>
+    <Property Name="IdUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" Nullable="true" />
+    <Property Name="LastName" Type="String" Nullable="true" />
+    <Property Name="Email" Type="String" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User_Role">
+    <Key>
+      <PropertyRef Name="IdUser" />
+      <PropertyRef Name="IdRole" />
+    </Key>
+    <Property Name="IdUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="IdRole" Type="Int32" Nullable="false" />
+    <Property Name="RoleIdRole" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Role" Relationship="AuctionModel.RoleUser_Role" FromRole="User_Role" ToRole="Role" />
+    <NavigationProperty Name="User" Relationship="AuctionModel.UserUser_Role" FromRole="User_Role" ToRole="User" />
+    <Property Name="UserIdUser" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="RoleUser_Role">
+    <End Type="AuctionModel.Role" Role="Role" Multiplicity="1" />
+    <End Type="AuctionModel.User_Role" Role="User_Role" Multiplicity="*" />
+  </Association>
+  <Association Name="UserUser_Role">
+    <End Type="AuctionModel.User" Role="User" Multiplicity="1" />
+    <End Type="AuctionModel.User_Role" Role="User_Role" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IdUser" />
+      </Principal>
+      <Dependent Role="User_Role">
+        <PropertyRef Name="UserIdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
