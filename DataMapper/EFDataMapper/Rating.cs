@@ -12,16 +12,14 @@ namespace DataMapper.EFDataMapper
     using System;
     using System.Collections.Generic;
     
-    public partial class Currency
+    public partial class Rating
     {
-        public Currency()
-        {
-            this.Auctions = new HashSet<Auction>();
-        }
+        public int Id { get; set; }
+        public int Grade { get; set; }
+        public System.DateTime Date { get; set; }
+        public int UserIdUser { get; set; }
+        public int UserIdUser1 { get; set; }
     
-        public int IdCurrency { get; set; }
-        public string Name { get; set; }
-    
-        public virtual ICollection<Auction> Auctions { get; set; }
+        public virtual User User { get; set; }
     }
 }

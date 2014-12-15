@@ -12,24 +12,24 @@ namespace DataMapper.EFDataMapper
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class Auction
     {
-        public User()
+        public Auction()
         {
-            this.Roles = new HashSet<Role>();
-            this.Ratings = new HashSet<Rating>();
-            this.Auctions = new HashSet<Auction>();
             this.ProductActions = new HashSet<ProductAction>();
         }
     
-        public int IdUser { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
+        public int IdAuction { get; set; }
+        public byte BeginDate { get; set; }
+        public System.DateTime EndDate { get; set; }
+        public decimal StartPrice { get; set; }
+        public bool Finished { get; set; }
+        public int UserIdUser { get; set; }
+        public int CurrencyIdCurrency { get; set; }
     
-        public virtual ICollection<Role> Roles { get; set; }
-        public virtual ICollection<Rating> Ratings { get; set; }
-        public virtual ICollection<Auction> Auctions { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual User User { get; set; }
+        public virtual Currency Currency { get; set; }
         public virtual ICollection<ProductAction> ProductActions { get; set; }
     }
 }
