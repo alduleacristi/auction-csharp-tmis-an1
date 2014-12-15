@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AuctionModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="AuctionModelStoreContainer">
+    <EntitySet Name="Roles" EntityType="AuctionModel.Store.Roles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="AuctionModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Configurations" EntityType="AuctionModel.Store.Configurations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Currencies" EntityType="AuctionModel.Store.Currencies" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="AuctionModel.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RoleUser" EntityType="AuctionModel.Store.RoleUser" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_RoleUser_Role" Association="AuctionModel.Store.FK_RoleUser_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="RoleUser" EntitySet="RoleUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RoleUser_User" Association="AuctionModel.Store.FK_RoleUser_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="RoleUser" EntitySet="RoleUser" />
+    </AssociationSet>
+    <AssociationSet Name="CategoryCategory" Association="AuctionModel.Store.CategoryCategory">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Category1" EntitySet="Categories" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="IdRole" />
+    </Key>
+    <Property Name="IdRole" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="real" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="IdUser" />
+    </Key>
+    <Property Name="IdUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Configurations">
+    <Key>
+      <PropertyRef Name="IdConfiguration" />
+    </Key>
+    <Property Name="IdConfiguration" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Key" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Currencies">
+    <Key>
+      <PropertyRef Name="IdCurrency" />
+    </Key>
+    <Property Name="IdCurrency" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="IdCategory" />
+    </Key>
+    <Property Name="IdCategory" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" Nullable="true" MaxLength="200" />
+    <Property Name="IdParentCategory" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="RoleUser">
+    <Key>
+      <PropertyRef Name="Roles_IdRole" />
+      <PropertyRef Name="Users_IdUser" />
+    </Key>
+    <Property Name="Roles_IdRole" Type="int" Nullable="false" />
+    <Property Name="Users_IdUser" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="CategoryCategory">
+    <End Role="Category" Type="AuctionModel.Store.Categories" Multiplicity="0..1" />
+    <End Role="Category1" Type="AuctionModel.Store.Categories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="IdCategory" />
+      </Principal>
+      <Dependent Role="Category1">
+        <PropertyRef Name="IdParentCategory" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RoleUser_Role">
+    <End Role="Role" Type="AuctionModel.Store.Roles" Multiplicity="1" />
+    <End Role="RoleUser" Type="AuctionModel.Store.RoleUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="IdRole" />
+      </Principal>
+      <Dependent Role="RoleUser">
+        <PropertyRef Name="Roles_IdRole" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RoleUser_User">
+    <End Role="RoleUser" Type="AuctionModel.Store.RoleUser" Multiplicity="*" />
+    <End Role="User" Type="AuctionModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IdUser" />
+      </Principal>
+      <Dependent Role="RoleUser">
+        <PropertyRef Name="Users_IdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="AuctionModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="AuctionModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Roles" EntityType="AuctionModel.Role" />
+          <EntitySet Name="Users" EntityType="AuctionModel.User" />
+          <AssociationSet Name="RoleUser" Association="AuctionModel.RoleUser">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Configurations" EntityType="AuctionModel.Configuration" />
+          <EntitySet Name="Currencies" EntityType="AuctionModel.Currency" />
+          <EntitySet Name="Categories" EntityType="AuctionModel.Category" />
+          <AssociationSet Name="CategoryCategory" Association="AuctionModel.CategoryCategory">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Category1" EntitySet="Categories" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="IdRole" />
+          </Key>
+          <Property Name="IdRole" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="Single" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="AuctionModel.RoleUser" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="true" />
+          <Property Name="LastName" Type="String" Nullable="true" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="Roles" Relationship="AuctionModel.RoleUser" FromRole="User" ToRole="Role" />
+        </EntityType>
+        <Association Name="RoleUser">
+          <End Type="AuctionModel.Role" Role="Role" Multiplicity="*" />
+          <End Type="AuctionModel.User" Role="User" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Configuration">
+          <Key>
+            <PropertyRef Name="IdConfiguration" />
+          </Key>
+          <Property Name="IdConfiguration" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Key" Type="String" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="IdCurrency" />
+          </Key>
+          <Property Name="IdCurrency" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="IdCategory" />
+          </Key>
+          <Property Name="IdCategory" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="true" MaxLength="200" />
+          <NavigationProperty Name="Categories" Relationship="AuctionModel.CategoryCategory" FromRole="Category" ToRole="Category1" />
+          <NavigationProperty Name="ParentCategory" Relationship="AuctionModel.CategoryCategory" FromRole="Category1" ToRole="Category" />
+          <Property Name="IdParentCategory" Type="Int32" Nullable="true" />
+        </EntityType>
+        <Association Name="CategoryCategory">
+          <End Type="AuctionModel.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="AuctionModel.Category" Role="Category1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="IdCategory" />
+            </Principal>
+            <Dependent Role="Category1">
+              <PropertyRef Name="IdParentCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AuctionModelStoreContainer" CdmEntityContainer="AuctionModelContainer">
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Role)">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="IdRole" ColumnName="IdRole" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Configurations">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Configuration)">
+        <MappingFragment StoreEntitySet="Configurations">
+          <ScalarProperty Name="IdConfiguration" ColumnName="IdConfiguration" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Currencies">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Currency)">
+        <MappingFragment StoreEntitySet="Currencies">
+          <ScalarProperty Name="IdCurrency" ColumnName="IdCurrency" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Category)">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IdParentCategory" ColumnName="IdParentCategory" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="RoleUser" TypeName="AuctionModel.RoleUser" StoreEntitySet="RoleUser">
+      <EndProperty Name="Role">
+        <ScalarProperty Name="IdRole" ColumnName="Roles_IdRole" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="IdUser" ColumnName="Users_IdUser" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
