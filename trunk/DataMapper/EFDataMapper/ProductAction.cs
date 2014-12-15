@@ -12,21 +12,19 @@ namespace DataMapper.EFDataMapper
     using System;
     using System.Collections.Generic;
     
-    public partial class Category
+    public partial class ProductAction
     {
-        public Category()
+        public ProductAction()
         {
-            this.Categories = new HashSet<Category>();
-            this.Products = new HashSet<Product>();
+            this.Users = new HashSet<User>();
         }
     
-        public int IdCategory { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Nullable<int> IdParentCategory { get; set; }
+        public int IdProductAction { get; set; }
+        public double Price { get; set; }
+        public System.DateTime Date { get; set; }
+        public int AuctionIdAuction { get; set; }
     
-        public virtual ICollection<Category> Categories { get; set; }
-        public virtual Category ParentCategory { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<User> Users { get; set; }
+        public virtual Auction Auction { get; set; }
     }
 }

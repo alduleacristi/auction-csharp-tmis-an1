@@ -30,5 +30,9 @@ namespace DataMapper.EFDataMapper
         public virtual DbSet<Configuration> Configurations { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Auction> Auctions { get; set; }
+        public virtual DbSet<ProductAction> ProductActions { get; set; }
     }
 }
