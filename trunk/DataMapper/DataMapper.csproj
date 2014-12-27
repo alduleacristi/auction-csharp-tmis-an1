@@ -36,8 +36,17 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -48,37 +57,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DataMapperFactoryMethod.cs" />
     <Compile Include="EFDataMapper\AuctionModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AuctionModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EFDataMapper\AuctionModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EFDataMapper\AuctionModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AuctionModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="EFDataMapper\Category.cs">
-      <DependentUpon>AuctionModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EFDataMapper\Configuration.cs">
-      <DependentUpon>AuctionModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EFDataMapper\Currency.cs">
-      <DependentUpon>AuctionModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EFDataMapper\Role.cs">
-      <DependentUpon>AuctionModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EFDataMapper\User.cs">
-      <DependentUpon>AuctionModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="EFDataMapper\EFDataMapperFactory.cs" />
+    <Compile Include="EFDataMapper\EFRoleFactory.cs" />
+    <Compile Include="Exceptions\AuctionException.cs" />
+    <Compile Include="Exceptions\DuplicateException.cs" />
+    <Compile Include="Exceptions\ValidationException.cs" />
+    <Compile Include="IDataMapperFactory.cs" />
+    <Compile Include="IRoleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,18 +84,16 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="EFDataMapper\AuctionModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AuctionModel.Context.cs</LastGenOutput>
       <DependentUpon>AuctionModel.edmx</DependentUpon>
+      <CustomToolNamespace>DomainModel</CustomToolNamespace>
     </None>
     <None Include="EFDataMapper\AuctionModel.edmx.diagram">
-      <DependentUpon>AuctionModel.edmx</DependentUpon>
-    </None>
-    <None Include="EFDataMapper\AuctionModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AuctionModel.cs</LastGenOutput>
       <DependentUpon>AuctionModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
@@ -109,6 +103,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj">
+      <Project>{94d1f7df-1638-4ea0-85e1-a03789e1d7aa}</Project>
+      <Name>DomainModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

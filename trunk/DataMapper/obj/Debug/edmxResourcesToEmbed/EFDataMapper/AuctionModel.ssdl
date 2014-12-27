@@ -1,4 +1,313 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="AuctionModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-  <EntityContainer Name="AuctionModelTargetContainer" />
+<Schema Namespace="AuctionModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="AuctionModelStoreContainer">
+    <EntitySet Name="Roles" EntityType="AuctionModel.Store.Roles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="AuctionModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Configurations" EntityType="AuctionModel.Store.Configurations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Currencies" EntityType="AuctionModel.Store.Currencies" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="AuctionModel.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Ratings" EntityType="AuctionModel.Store.Ratings" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="AuctionModel.Store.Products" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Auctions" EntityType="AuctionModel.Store.Auctions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductActions" EntityType="AuctionModel.Store.ProductActions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RoleUser" EntityType="AuctionModel.Store.RoleUser" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductCategory" EntityType="AuctionModel.Store.ProductCategory" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductActionUser" EntityType="AuctionModel.Store.ProductActionUser" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_RoleUser_Role" Association="AuctionModel.Store.FK_RoleUser_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="RoleUser" EntitySet="RoleUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RoleUser_User" Association="AuctionModel.Store.FK_RoleUser_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="RoleUser" EntitySet="RoleUser" />
+    </AssociationSet>
+    <AssociationSet Name="CategoryCategory" Association="AuctionModel.Store.CategoryCategory">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Category1" EntitySet="Categories" />
+    </AssociationSet>
+    <AssociationSet Name="AuctionProduct" Association="AuctionModel.Store.AuctionProduct">
+      <End Role="Auction" EntitySet="Auctions" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="RatingUser" Association="AuctionModel.Store.RatingUser">
+      <End Role="Rating" EntitySet="Ratings" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="AuctionUser" Association="AuctionModel.Store.AuctionUser">
+      <End Role="Auction" EntitySet="Auctions" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="AuctionCurrency" Association="AuctionModel.Store.AuctionCurrency">
+      <End Role="Auction" EntitySet="Auctions" />
+      <End Role="Currency" EntitySet="Currencies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductCategory_Product" Association="AuctionModel.Store.FK_ProductCategory_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductCategory" EntitySet="ProductCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductCategory_Category" Association="AuctionModel.Store.FK_ProductCategory_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="ProductCategory" EntitySet="ProductCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductActionUser_ProductAction" Association="AuctionModel.Store.FK_ProductActionUser_ProductAction">
+      <End Role="ProductAction" EntitySet="ProductActions" />
+      <End Role="ProductActionUser" EntitySet="ProductActionUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductActionUser_User" Association="AuctionModel.Store.FK_ProductActionUser_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ProductActionUser" EntitySet="ProductActionUser" />
+    </AssociationSet>
+    <AssociationSet Name="ProductActionAuction" Association="AuctionModel.Store.ProductActionAuction">
+      <End Role="ProductAction" EntitySet="ProductActions" />
+      <End Role="Auction" EntitySet="Auctions" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="IdRole" />
+    </Key>
+    <Property Name="IdRole" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="IdUser" />
+    </Key>
+    <Property Name="IdUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Configurations">
+    <Key>
+      <PropertyRef Name="IdConfiguration" />
+    </Key>
+    <Property Name="IdConfiguration" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Key" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Currencies">
+    <Key>
+      <PropertyRef Name="IdCurrency" />
+    </Key>
+    <Property Name="IdCurrency" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="IdCategory" />
+    </Key>
+    <Property Name="IdCategory" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" Nullable="true" MaxLength="200" />
+    <Property Name="IdParentCategory" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Ratings">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Grade" Type="int" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="UserIdUser" Type="int" Nullable="false" />
+    <Property Name="UserIdUser1" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="IdProduct" />
+    </Key>
+    <Property Name="IdProduct" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="30" />
+    <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="Auctions">
+    <Key>
+      <PropertyRef Name="IdAuction" />
+    </Key>
+    <Property Name="IdAuction" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BeginDate" Type="tinyint" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" Nullable="false" />
+    <Property Name="StartPrice" Type="decimal" Nullable="false" />
+    <Property Name="Finished" Type="bit" Nullable="false" />
+    <Property Name="UserIdUser" Type="int" Nullable="false" />
+    <Property Name="CurrencyIdCurrency" Type="int" Nullable="false" />
+    <Property Name="Product_IdProduct" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductActions">
+    <Key>
+      <PropertyRef Name="IdProductAction" />
+    </Key>
+    <Property Name="IdProductAction" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Price" Type="float" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="AuctionIdAuction" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RoleUser">
+    <Key>
+      <PropertyRef Name="Roles_IdRole" />
+      <PropertyRef Name="Users_IdUser" />
+    </Key>
+    <Property Name="Roles_IdRole" Type="int" Nullable="false" />
+    <Property Name="Users_IdUser" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductCategory">
+    <Key>
+      <PropertyRef Name="Products_IdProduct" />
+      <PropertyRef Name="Categories_IdCategory" />
+    </Key>
+    <Property Name="Products_IdProduct" Type="int" Nullable="false" />
+    <Property Name="Categories_IdCategory" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductActionUser">
+    <Key>
+      <PropertyRef Name="ProductActions_IdProductAction" />
+      <PropertyRef Name="Users_IdUser" />
+    </Key>
+    <Property Name="ProductActions_IdProductAction" Type="int" Nullable="false" />
+    <Property Name="Users_IdUser" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="CategoryCategory">
+    <End Role="Category" Type="AuctionModel.Store.Categories" Multiplicity="0..1" />
+    <End Role="Category1" Type="AuctionModel.Store.Categories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="IdCategory" />
+      </Principal>
+      <Dependent Role="Category1">
+        <PropertyRef Name="IdParentCategory" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AuctionProduct">
+    <End Role="Auction" Type="AuctionModel.Store.Auctions" Multiplicity="*" />
+    <End Role="Product" Type="AuctionModel.Store.Products" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="IdProduct" />
+      </Principal>
+      <Dependent Role="Auction">
+        <PropertyRef Name="Product_IdProduct" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RatingUser">
+    <End Role="Rating" Type="AuctionModel.Store.Ratings" Multiplicity="*" />
+    <End Role="User" Type="AuctionModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IdUser" />
+      </Principal>
+      <Dependent Role="Rating">
+        <PropertyRef Name="UserIdUser1" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AuctionUser">
+    <End Role="Auction" Type="AuctionModel.Store.Auctions" Multiplicity="*" />
+    <End Role="User" Type="AuctionModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IdUser" />
+      </Principal>
+      <Dependent Role="Auction">
+        <PropertyRef Name="UserIdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AuctionCurrency">
+    <End Role="Auction" Type="AuctionModel.Store.Auctions" Multiplicity="*" />
+    <End Role="Currency" Type="AuctionModel.Store.Currencies" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Currency">
+        <PropertyRef Name="IdCurrency" />
+      </Principal>
+      <Dependent Role="Auction">
+        <PropertyRef Name="CurrencyIdCurrency" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductActionAuction">
+    <End Role="ProductAction" Type="AuctionModel.Store.ProductActions" Multiplicity="*" />
+    <End Role="Auction" Type="AuctionModel.Store.Auctions" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Auction">
+        <PropertyRef Name="IdAuction" />
+      </Principal>
+      <Dependent Role="ProductAction">
+        <PropertyRef Name="AuctionIdAuction" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RoleUser_Role">
+    <End Role="Role" Type="AuctionModel.Store.Roles" Multiplicity="1" />
+    <End Role="RoleUser" Type="AuctionModel.Store.RoleUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="IdRole" />
+      </Principal>
+      <Dependent Role="RoleUser">
+        <PropertyRef Name="Roles_IdRole" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RoleUser_User">
+    <End Role="RoleUser" Type="AuctionModel.Store.RoleUser" Multiplicity="*" />
+    <End Role="User" Type="AuctionModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IdUser" />
+      </Principal>
+      <Dependent Role="RoleUser">
+        <PropertyRef Name="Users_IdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductCategory_Product">
+    <End Role="Product" Type="AuctionModel.Store.Products" Multiplicity="1" />
+    <End Role="ProductCategory" Type="AuctionModel.Store.ProductCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="IdProduct" />
+      </Principal>
+      <Dependent Role="ProductCategory">
+        <PropertyRef Name="Products_IdProduct" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductCategory_Category">
+    <End Role="ProductCategory" Type="AuctionModel.Store.ProductCategory" Multiplicity="*" />
+    <End Role="Category" Type="AuctionModel.Store.Categories" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="IdCategory" />
+      </Principal>
+      <Dependent Role="ProductCategory">
+        <PropertyRef Name="Categories_IdCategory" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductActionUser_ProductAction">
+    <End Role="ProductAction" Type="AuctionModel.Store.ProductActions" Multiplicity="1" />
+    <End Role="ProductActionUser" Type="AuctionModel.Store.ProductActionUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductAction">
+        <PropertyRef Name="IdProductAction" />
+      </Principal>
+      <Dependent Role="ProductActionUser">
+        <PropertyRef Name="ProductActions_IdProductAction" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductActionUser_User">
+    <End Role="ProductActionUser" Type="AuctionModel.Store.ProductActionUser" Multiplicity="*" />
+    <End Role="User" Type="AuctionModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IdUser" />
+      </Principal>
+      <Dependent Role="ProductActionUser">
+        <PropertyRef Name="Users_IdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

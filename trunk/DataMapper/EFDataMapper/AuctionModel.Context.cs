@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataMapper.EFDataMapper
+namespace DomainModel
 {
     using System;
     using System.Data.Entity;
