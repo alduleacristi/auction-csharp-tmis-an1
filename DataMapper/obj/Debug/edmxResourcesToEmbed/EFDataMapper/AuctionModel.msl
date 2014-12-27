@@ -1,6 +1,125 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-  <Alias Key="Model" Value="AuctionModel" />
-  <Alias Key="Target" Value="AuctionModel.Store" />
-  <EntityContainerMapping CdmEntityContainer="AuctionModelContainer" StorageEntityContainer="AuctionModelTargetContainer" />
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AuctionModelStoreContainer" CdmEntityContainer="AuctionModelContainer">
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Role)">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="IdRole" ColumnName="IdRole" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Configurations">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Configuration)">
+        <MappingFragment StoreEntitySet="Configurations">
+          <ScalarProperty Name="IdConfiguration" ColumnName="IdConfiguration" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Currencies">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Currency)">
+        <MappingFragment StoreEntitySet="Currencies">
+          <ScalarProperty Name="IdCurrency" ColumnName="IdCurrency" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Category)">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IdParentCategory" ColumnName="IdParentCategory" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ratings">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Rating)">
+        <MappingFragment StoreEntitySet="Ratings">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Grade" ColumnName="Grade" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="UserIdUser" ColumnName="UserIdUser" />
+          <ScalarProperty Name="UserIdUser1" ColumnName="UserIdUser1" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Product)">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="IdProduct" ColumnName="IdProduct" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Auctions">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.Auction)">
+        <MappingFragment StoreEntitySet="Auctions">
+          <ScalarProperty Name="IdAuction" ColumnName="IdAuction" />
+          <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartPrice" ColumnName="StartPrice" />
+          <ScalarProperty Name="Finished" ColumnName="Finished" />
+          <ScalarProperty Name="UserIdUser" ColumnName="UserIdUser" />
+          <ScalarProperty Name="CurrencyIdCurrency" ColumnName="CurrencyIdCurrency" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductActions">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.ProductAction)">
+        <MappingFragment StoreEntitySet="ProductActions">
+          <ScalarProperty Name="IdProductAction" ColumnName="IdProductAction" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="AuctionIdAuction" ColumnName="AuctionIdAuction" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="RoleUser" TypeName="AuctionModel.RoleUser" StoreEntitySet="RoleUser">
+      <EndProperty Name="Role">
+        <ScalarProperty Name="IdRole" ColumnName="Roles_IdRole" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="IdUser" ColumnName="Users_IdUser" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AuctionProduct" TypeName="AuctionModel.AuctionProduct" StoreEntitySet="Auctions">
+      <EndProperty Name="Product">
+        <ScalarProperty Name="IdProduct" ColumnName="Product_IdProduct" />
+      </EndProperty>
+      <EndProperty Name="Auction">
+        <ScalarProperty Name="IdAuction" ColumnName="IdAuction" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ProductCategory" TypeName="AuctionModel.ProductCategory" StoreEntitySet="ProductCategory">
+      <EndProperty Name="Product">
+        <ScalarProperty Name="IdProduct" ColumnName="Products_IdProduct" />
+      </EndProperty>
+      <EndProperty Name="Category">
+        <ScalarProperty Name="IdCategory" ColumnName="Categories_IdCategory" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ProductActionUser" TypeName="AuctionModel.ProductActionUser" StoreEntitySet="ProductActionUser">
+      <EndProperty Name="ProductAction">
+        <ScalarProperty Name="IdProductAction" ColumnName="ProductActions_IdProductAction" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="IdUser" ColumnName="Users_IdUser" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
 </Mapping>
