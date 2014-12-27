@@ -1,0 +1,10 @@
+D:\Facultate\Enterprise .Net\Auction\DomainModel\bin\Debug\DomainModel.dll
+D:\Facultate\Enterprise .Net\Auction\DomainModel\bin\Debug\DomainModel.pdb
+D:\Facultate\Enterprise .Net\Auction\DomainModel\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\Facultate\Enterprise .Net\Auction\DomainModel\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Validation.dll
+D:\Facultate\Enterprise .Net\Auction\DomainModel\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\Facultate\Enterprise .Net\Auction\DomainModel\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.xml
+D:\Facultate\Enterprise .Net\Auction\DomainModel\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Validation.xml
+D:\Facultate\Enterprise .Net\Auction\DomainModel\obj\Debug\DomainModel.dll
+D:\Facultate\Enterprise .Net\Auction\DomainModel\obj\Debug\DomainModel.pdb
+D:\Facultate\Enterprise .Net\Auction\DomainModel\obj\Debug\DomainModel.csprojResolveAssemblyReference.cache
