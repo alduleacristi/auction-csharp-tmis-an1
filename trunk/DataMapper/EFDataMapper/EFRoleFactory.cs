@@ -15,13 +15,7 @@ namespace DataMapper.EFDataMapper
     class EFRoleFactory:IRoleFactory
     {
         public void AddRole(Role role)
-        {
-            /*var validationResults = Validation.Validate<Role>(role);
-            if (!validationResults.IsValid)
-            {
-                throw new ValidationException("Invalid role name.");
-            }*/
-            
+        {   
             Role auxRole = this.GetRoleByName(role.Name);
             if (auxRole != null)
                 throw new DuplicateException("You can not add two roles with the same name ("+ role.Name+").");
@@ -32,9 +26,10 @@ namespace DataMapper.EFDataMapper
                 try
                 {
                     context.SaveChanges();
-                }catch(DbEntityValidationException exc)
+                }
+                catch(DbEntityValidationException exc)
                 {
-                    throw new ValidationException("Invalid role name.");
+                    throw new ValidationException("Invalid role name {" + role.Name + "}");
                 }
             }
         }
@@ -46,6 +41,51 @@ namespace DataMapper.EFDataMapper
                 var roleVar = (from role in context.Roles where role.Name.Equals(name)
                                   select role).FirstOrDefault();
                 return roleVar;
+            }
+        }
+
+        public void UpdateRole(String oldRoleName,String newRoleName)
+        {
+            Role role = this.GetRoleByName(oldRoleName);
+            if (role == null)
+                throw new EntityNotFoundException("The role with name " + oldRoleName + " does not exist.");
+
+            if (!oldRoleName.Equals(newRoleName))
+            {
+                Role auxRole = this.GetRoleByName(newRoleName);
+                if (auxRole != null)
+                    throw new DuplicateException("The role with name {"+newRoleName+"} already exist.");
+                role.Name = newRoleName;
+
+                using (var context = new AuctionModelContainer())
+                {
+                    context.Roles.Attach(role);
+                    var entry = context.Entry(role);
+                    entry.Property(r => r.Name).IsModified = true;
+
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (DbEntityValidationException exc)
+                    {
+                        throw new ValidationException("Invalid role name {" + role.Name + "}");
+                    }
+                }
+            }
+        }
+
+        public void DropRole(String roleName)
+        {
+            Role role = this.GetRoleByName(roleName);
+            if (role == null)
+                throw new EntityNotFoundException("The role with name " + roleName + " does not exist.");
+
+            using (var context = new AuctionModelContainer())
+            {
+                context.Roles.Attach(role);
+                context.Roles.Remove(role);
+                context.SaveChanges();
             }
         }
     }

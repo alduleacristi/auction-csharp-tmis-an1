@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 12/27/2014 11:11:41
+-- Date Created: 12/30/2014 13:32:59
 -- Generated from EDMX file: D:\Facultate\Enterprise .Net\Auction\DataMapper\EFDataMapper\AuctionModel.edmx
 -- --------------------------------------------------
 
@@ -119,7 +119,7 @@ GO
 CREATE TABLE [dbo].[Configurations] (
     [IdConfiguration] int IDENTITY(1,1) NOT NULL,
     [Key] nvarchar(max)  NOT NULL,
-    [Value] nvarchar(max)  NOT NULL
+    [Value] int  NOT NULL
 );
 GO
 
