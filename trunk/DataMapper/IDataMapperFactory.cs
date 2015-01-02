@@ -22,5 +22,23 @@ namespace DataMapper
         {
             get;
         }
+
+        IUserFactory UserFactory
+        {
+            get;
+        }
+
+        IConfigurationFactory ConfigurationFactory
+        {
+            get;
+        }
+
+        IAuctionFactory AuctionFactory
+        {
+            get;
+        }
+
+
+
     }
 }
