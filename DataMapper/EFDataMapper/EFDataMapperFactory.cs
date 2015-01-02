@@ -15,5 +15,21 @@ namespace DataMapper.EFDataMapper
                 return new EFRoleFactory();
             }
         }
+
+        public ICategoryFactory CategoryFactory
+        {
+            get
+            {
+                return new EFCategoryFactory();
+            }
+        }
+
+        public IProductFactory ProductFactory
+        {
+            get
+            {
+                return new EFProductFactory();
+            }
+        }
     }
 }
