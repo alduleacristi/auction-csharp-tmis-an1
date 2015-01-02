@@ -11,5 +11,7 @@ namespace DataMapper
     {
         void AddRole(Role role);
         Role GetRoleByName(String name);
+        void UpdateRole(String oldRoleName,String newRoleName);
+        void DropRole(String roleName);
     }
 }
