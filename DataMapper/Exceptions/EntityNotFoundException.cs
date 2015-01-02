@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataMapper.Exceptions
 {
-    class EntityNotFoundException:AuctionException
+    public class EntityNotFoundException:AuctionException
     {
         public EntityNotFoundException():base()
         {
