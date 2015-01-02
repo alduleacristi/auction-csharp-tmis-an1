@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataMapper.EFDataMapper
 {
-    class EFDataMapperFactory:IDataMapperFactory
+    public class EFDataMapperFactory:IDataMapperFactory
     {
         public IRoleFactory RoleFactory
         {
@@ -31,5 +31,34 @@ namespace DataMapper.EFDataMapper
                 return new EFProductFactory();
             }
         }
-    }
+
+
+
+
+
+
+
+ public IUserFactory UserFactory
+        {
+            get
+            {
+                return new EFUserFactory();
+            }
+        }
+
+        public IConfigurationFactory ConfigurationFactory
+        {
+            get
+            {
+                return new EFConfigurationFactory();
+            }
+        }
+
+        public IAuctionFactory AuctionFactory
+        {
+            get
+            {
+                return new EFAuctionFactory();
+            }
+        }    }
 }

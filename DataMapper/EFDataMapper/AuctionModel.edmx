@@ -89,7 +89,7 @@
     </Key>
     <Property Name="IdConfiguration" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Key" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Value" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Currencies">
     <Key>
@@ -402,8 +402,8 @@
             <PropertyRef Name="IdConfiguration" />
           </Key>
           <Property Name="IdConfiguration" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Key" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Key" Type="String" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Currency">
           <Key>
