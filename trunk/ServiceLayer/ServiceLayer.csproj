@@ -49,12 +49,15 @@
   <ItemGroup>
     <Compile Include="Common\AuctionLogger.cs" />
     <Compile Include="ICategoryService.cs" />
-    <Compile Include="IProductService.cs" />
-    <Compile Include="IRoleService.cs" />
+    <Compile Include="IProductService.cs" />    <Compile Include="Common\Constants.cs" />
+    <Compile Include="IAuctionService.cs" />
+    <Compile Include="IConfiguration.cs" />    <Compile Include="IRoleService.cs" />
+    <Compile Include="IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicesImplementation\CategoryService.cs" />
-    <Compile Include="ServicesImplementation\ProductService.cs" />
-    <Compile Include="ServicesImplementation\RoleService.cs" />
+    <Compile Include="ServicesImplementation\ProductService.cs" />   <Compile Include="ServicesImplementation\AuctionService.cs" />
+    <Compile Include="ServicesImplementation\ConfigurationService.cs" />    <Compile Include="ServicesImplementation\RoleService.cs" />
+    <Compile Include="ServicesImplementation\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataMapper\DataMapper.csproj">
@@ -68,8 +71,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
