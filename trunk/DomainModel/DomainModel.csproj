@@ -72,6 +72,7 @@
     <Compile Include="ExternalCategory.cs" />
     <Compile Include="ExternalProduct.cs" />
     <Compile Include="ExternalRole.cs" />
+    <Compile Include="ExternalUser.cs" />
     <Compile Include="Product.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
@@ -90,6 +91,7 @@
     <Compile Include="User.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
