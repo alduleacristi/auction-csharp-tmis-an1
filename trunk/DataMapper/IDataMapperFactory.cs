@@ -12,5 +12,15 @@ namespace DataMapper
         {
             get;
         }
+
+        ICategoryFactory CategoryFactory
+        {
+            get;
+        }
+
+        IProductFactory ProductFactory
+        {
+            get;
+        }
     }
 }

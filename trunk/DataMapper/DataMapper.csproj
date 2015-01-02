@@ -68,12 +68,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AuctionModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="EFDataMapper\EFCategoryFactory.cs" />
     <Compile Include="EFDataMapper\EFDataMapperFactory.cs" />
+    <Compile Include="EFDataMapper\EFProductFactory.cs" />
     <Compile Include="EFDataMapper\EFRoleFactory.cs" />
+    <Compile Include="EFDataMapper\ExternalAuctionModelContainer.cs" />
     <Compile Include="Exceptions\AuctionException.cs" />
+    <Compile Include="Exceptions\DependencyException.cs" />
     <Compile Include="Exceptions\DuplicateException.cs" />
+    <Compile Include="Exceptions\EntityDoesNotExistException.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
+    <Compile Include="ICategoryFactory.cs" />
     <Compile Include="IDataMapperFactory.cs" />
+    <Compile Include="IProductFactory.cs" />
     <Compile Include="IRoleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
