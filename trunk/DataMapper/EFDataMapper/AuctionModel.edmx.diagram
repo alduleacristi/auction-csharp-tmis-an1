@@ -16,14 +16,14 @@
         <EntityTypeShape EntityType="AuctionModel.Product" Width="1.5" PointX="9.25" PointY="4.125" />
         <EntityTypeShape EntityType="AuctionModel.Auction" Width="2" PointX="11.75" PointY="1.25" />
         <AssociationConnector Association="AuctionModel.AuctionProduct" />
-        <EntityTypeShape EntityType="AuctionModel.ProductAuction" Width="1.5" PointX="13.75" PointY="5.625" />
+        <EntityTypeShape EntityType="AuctionModel.ProductAuction" Width="1.5" PointX="7.125" PointY="5" />
         <AssociationConnector Association="AuctionModel.RatingUser" />
         <AssociationConnector Association="AuctionModel.AuctionUser" />
         <AssociationConnector Association="AuctionModel.AuctionCurrency" />
         <AssociationConnector Association="AuctionModel.ProductCategory" />
-        <AssociationConnector Association="AuctionModel.ProductActionUser" />
         <AssociationConnector Association="AuctionModel.ProductActionAuction" />
         <AssociationConnector Association="AuctionModel.ProductActionCurrency" />
+        <AssociationConnector Association="AuctionModel.ProductAuctionUser" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
