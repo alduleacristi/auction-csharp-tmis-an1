@@ -14,7 +14,7 @@
     <EntitySet Name="Ratings" EntityType="AuctionModel.Store.Ratings" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Products" EntityType="AuctionModel.Store.Products" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Auctions" EntityType="AuctionModel.Store.Auctions" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="ProductActions" EntityType="AuctionModel.Store.ProductActions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductAuctions" EntityType="AuctionModel.Store.ProductAuctions" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RoleUser" EntityType="AuctionModel.Store.RoleUser" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ProductCategory" EntityType="AuctionModel.Store.ProductCategory" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ProductActionUser" EntityType="AuctionModel.Store.ProductActionUser" store:Type="Tables" Schema="dbo" />
@@ -55,7 +55,7 @@
       <End Role="ProductCategory" EntitySet="ProductCategory" />
     </AssociationSet>
     <AssociationSet Name="FK_ProductActionUser_ProductAction" Association="AuctionModel.Store.FK_ProductActionUser_ProductAction">
-      <End Role="ProductAction" EntitySet="ProductActions" />
+      <End Role="ProductAction" EntitySet="ProductAuctions" />
       <End Role="ProductActionUser" EntitySet="ProductActionUser" />
     </AssociationSet>
     <AssociationSet Name="FK_ProductActionUser_User" Association="AuctionModel.Store.FK_ProductActionUser_User">
@@ -63,8 +63,12 @@
       <End Role="ProductActionUser" EntitySet="ProductActionUser" />
     </AssociationSet>
     <AssociationSet Name="ProductActionAuction" Association="AuctionModel.Store.ProductActionAuction">
-      <End Role="ProductAction" EntitySet="ProductActions" />
+      <End Role="ProductAction" EntitySet="ProductAuctions" />
       <End Role="Auction" EntitySet="Auctions" />
+    </AssociationSet>
+    <AssociationSet Name="ProductActionCurrency" Association="AuctionModel.Store.ProductActionCurrency">
+      <End Role="ProductAction" EntitySet="ProductAuctions" />
+      <End Role="Currency" EntitySet="Currencies" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Roles">
@@ -132,13 +136,13 @@
     <Property Name="IdAuction" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BeginDate" Type="tinyint" Nullable="false" />
     <Property Name="EndDate" Type="datetime" Nullable="false" />
-    <Property Name="StartPrice" Type="decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="StartPrice" Type="float" Nullable="false" />
     <Property Name="Finished" Type="bit" Nullable="false" />
     <Property Name="UserIdUser" Type="int" Nullable="false" />
     <Property Name="CurrencyIdCurrency" Type="int" Nullable="false" />
     <Property Name="Product_IdProduct" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="ProductActions">
+  <EntityType Name="ProductAuctions">
     <Key>
       <PropertyRef Name="IdProductAction" />
     </Key>
@@ -146,6 +150,7 @@
     <Property Name="Price" Type="float" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
     <Property Name="AuctionIdAuction" Type="int" Nullable="false" />
+    <Property Name="Currency_IdCurrency" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="RoleUser">
     <Key>
@@ -232,7 +237,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="ProductActionAuction">
-    <End Role="ProductAction" Type="AuctionModel.Store.ProductActions" Multiplicity="*" />
+    <End Role="ProductAction" Type="AuctionModel.Store.ProductAuctions" Multiplicity="*" />
     <End Role="Auction" Type="AuctionModel.Store.Auctions" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="Auction">
@@ -240,6 +245,18 @@
       </Principal>
       <Dependent Role="ProductAction">
         <PropertyRef Name="AuctionIdAuction" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductActionCurrency">
+    <End Role="ProductAction" Type="AuctionModel.Store.ProductAuctions" Multiplicity="*" />
+    <End Role="Currency" Type="AuctionModel.Store.Currencies" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Currency">
+        <PropertyRef Name="IdCurrency" />
+      </Principal>
+      <Dependent Role="ProductAction">
+        <PropertyRef Name="Currency_IdCurrency" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -292,7 +309,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_ProductActionUser_ProductAction">
-    <End Role="ProductAction" Type="AuctionModel.Store.ProductActions" Multiplicity="1" />
+    <End Role="ProductAction" Type="AuctionModel.Store.ProductAuctions" Multiplicity="1" />
     <End Role="ProductActionUser" Type="AuctionModel.Store.ProductActionUser" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="ProductAction">
@@ -340,7 +357,7 @@
             <End Role="Auction" EntitySet="Auctions" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
-          <EntitySet Name="ProductActions" EntityType="AuctionModel.ProductAction" />
+          <EntitySet Name="ProductAuctions" EntityType="AuctionModel.ProductAuction" />
           <AssociationSet Name="RatingUser" Association="AuctionModel.RatingUser">
             <End Role="Rating" EntitySet="Ratings" />
             <End Role="User" EntitySet="Users" />
@@ -358,11 +375,11 @@
             <End Role="Category" EntitySet="Categories" />
           </AssociationSet>
           <AssociationSet Name="ProductActionUser" Association="AuctionModel.ProductActionUser">
-            <End Role="ProductAction" EntitySet="ProductActions" />
+            <End Role="ProductAction" EntitySet="ProductAuctions" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="ProductActionAuction" Association="AuctionModel.ProductActionAuction">
-            <End Role="ProductAction" EntitySet="ProductActions" />
+            <End Role="ProductAction" EntitySet="ProductAuctions" />
             <End Role="Auction" EntitySet="Auctions" />
           </AssociationSet>
           <FunctionImport Name="categories_FindChildren" ReturnType="Collection(AuctionModel.categories_FindChildren_Result)">
@@ -371,6 +388,10 @@
           <FunctionImport Name="categories_GetCatParentsNew" ReturnType="Collection(AuctionModel.categories_GetCatParentsNew_Result)">
             <Parameter Name="lCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <AssociationSet Name="ProductActionCurrency" Association="AuctionModel.ProductActionCurrency">
+            <End Role="ProductAction" EntitySet="ProductAuctions" />
+            <End Role="Currency" EntitySet="Currencies" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -412,6 +433,7 @@
           <Property Name="IdCurrency" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Auctions" Relationship="AuctionModel.AuctionCurrency" FromRole="Currency" ToRole="Auction" />
+          <NavigationProperty Name="ProductActions" Relationship="AuctionModel.ProductActionCurrency" FromRole="Currency" ToRole="ProductAction" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -466,7 +488,7 @@
           <NavigationProperty Name="Product" Relationship="AuctionModel.AuctionProduct" FromRole="Auction" ToRole="Product" />
           <Property Name="BeginDate" Type="Byte" Nullable="false" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="StartPrice" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="StartPrice" Type="Double" Nullable="false" />
           <Property Name="Finished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="User" Relationship="AuctionModel.AuctionUser" FromRole="Auction" ToRole="User" />
           <Property Name="UserIdUser" Type="Int32" Nullable="false" />
@@ -478,7 +500,7 @@
           <End Type="AuctionModel.Auction" Role="Auction" Multiplicity="0..1" />
           <End Type="AuctionModel.Product" Role="Product" Multiplicity="1" />
         </Association>
-        <EntityType Name="ProductAction">
+        <EntityType Name="ProductAuction">
           <Key>
             <PropertyRef Name="IdProductAction" />
           </Key>
@@ -488,6 +510,7 @@
           <NavigationProperty Name="Users" Relationship="AuctionModel.ProductActionUser" FromRole="ProductAction" ToRole="User" />
           <NavigationProperty Name="Auction" Relationship="AuctionModel.ProductActionAuction" FromRole="ProductAction" ToRole="Auction" />
           <Property Name="AuctionIdAuction" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Currency" Relationship="AuctionModel.ProductActionCurrency" FromRole="ProductAction" ToRole="Currency" />
         </EntityType>
         <Association Name="RatingUser">
           <End Type="AuctionModel.Rating" Role="Rating" Multiplicity="*" />
@@ -530,11 +553,11 @@
           <End Type="AuctionModel.Category" Role="Category" Multiplicity="*" />
         </Association>
         <Association Name="ProductActionUser">
-          <End Type="AuctionModel.ProductAction" Role="ProductAction" Multiplicity="*" />
+          <End Type="AuctionModel.ProductAuction" Role="ProductAction" Multiplicity="*" />
           <End Type="AuctionModel.User" Role="User" Multiplicity="*" />
         </Association>
         <Association Name="ProductActionAuction">
-          <End Type="AuctionModel.ProductAction" Role="ProductAction" Multiplicity="*" />
+          <End Type="AuctionModel.ProductAuction" Role="ProductAction" Multiplicity="*" />
           <End Type="AuctionModel.Auction" Role="Auction" Multiplicity="1" />
           <ReferentialConstraint>
             <Principal Role="Auction">
@@ -557,6 +580,10 @@
           <Property Type="String" Name="Description" Nullable="true" MaxLength="200" />
           <Property Type="Int32" Name="IdParentCategory" Nullable="true" />
         </ComplexType>
+        <Association Name="ProductActionCurrency">
+          <End Type="AuctionModel.ProductAuction" Role="ProductAction" Multiplicity="*" />
+          <End Type="AuctionModel.Currency" Role="Currency" Multiplicity="0..1" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -641,9 +668,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ProductActions">
-      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.ProductAction)">
-        <MappingFragment StoreEntitySet="ProductActions">
+    <EntitySetMapping Name="ProductAuctions">
+      <EntityTypeMapping TypeName="IsTypeOf(AuctionModel.ProductAuction)">
+        <MappingFragment StoreEntitySet="ProductAuctions">
           <ScalarProperty Name="IdProductAction" ColumnName="IdProductAction" />
           <ScalarProperty Name="Price" ColumnName="Price" />
           <ScalarProperty Name="Date" ColumnName="Date" />
@@ -682,6 +709,15 @@
       <EndProperty Name="User">
         <ScalarProperty Name="IdUser" ColumnName="Users_IdUser" />
       </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ProductActionCurrency" TypeName="AuctionModel.ProductActionCurrency" StoreEntitySet="ProductAuctions">
+      <EndProperty Name="Currency">
+        <ScalarProperty Name="IdCurrency" ColumnName="Currency_IdCurrency" />
+      </EndProperty>
+      <EndProperty Name="ProductAction">
+        <ScalarProperty Name="IdProductAction" ColumnName="IdProductAction" />
+      </EndProperty>
+      <Condition ColumnName="Currency_IdCurrency" IsNull="false" />
     </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
