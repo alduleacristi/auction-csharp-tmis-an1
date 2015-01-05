@@ -35,24 +35,24 @@ namespace DomainModel
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Auction> Auctions { get; set; }
-        public virtual DbSet<ProductAction> ProductActions { get; set; }
+        public virtual DbSet<ProductAuction> ProductAuctions { get; set; }
     
-        public virtual ObjectResult<Category> categories_FindChildren(Nullable<int> parent_id)
+        public virtual ObjectResult<categories_FindChildren_Result> categories_FindChildren(Nullable<int> parent_id)
         {
             var parent_idParameter = parent_id.HasValue ?
                 new ObjectParameter("parent_id", parent_id) :
                 new ObjectParameter("parent_id", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Category>("categories_FindChildren", parent_idParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<categories_FindChildren_Result>("categories_FindChildren", parent_idParameter);
         }
     
-        public virtual ObjectResult<Category> categories_GetCatParentsNew(Nullable<int> lCategoryID)
+        public virtual ObjectResult<categories_GetCatParentsNew_Result> categories_GetCatParentsNew(Nullable<int> lCategoryID)
         {
             var lCategoryIDParameter = lCategoryID.HasValue ?
                 new ObjectParameter("lCategoryID", lCategoryID) :
                 new ObjectParameter("lCategoryID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Category>("categories_GetCatParentsNew", lCategoryIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<categories_GetCatParentsNew_Result>("categories_GetCatParentsNew", lCategoryIDParameter);
         }
     }
 }

@@ -2,6 +2,7 @@
 using DomainModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,10 @@ namespace DataMapper.EFDataMapper
                 var userVar = (from user in context.Users
                                where user.Email.Equals(email)
                                select user).FirstOrDefault();
+
+                if(userVar != null)
+                    context.Entry(userVar).Collection(u => u.Auctions).Load();
+
                 return userVar;
             }
         }
@@ -51,7 +56,7 @@ namespace DataMapper.EFDataMapper
         {
             User user = GetUserByEmail(email);
             if(user == null)
-                throw new EntityNotFoundException("The user with email " + email + " does not exist.");
+                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
 
             if(!user.FirstName.Equals(newFirstName))
             {
@@ -84,7 +89,7 @@ namespace DataMapper.EFDataMapper
         {
             User user = GetUserByEmail(email);
             if (user == null)
-                throw new EntityNotFoundException("The user with email " + email + " does not exist.");
+                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
 
             if (!user.LastName.Equals(newLastName))
             {
@@ -117,7 +122,7 @@ namespace DataMapper.EFDataMapper
         {
             User user = GetUserByEmail(oldEmail);
             if (user == null)
-                throw new EntityNotFoundException("The user with email " + oldEmail + " does not exist.");
+                throw new EntityDoesNotExistException("The user with email " + oldEmail + " does not exist.");
 
             if (!oldEmail.Equals(newEmail))
             {
@@ -151,22 +156,38 @@ namespace DataMapper.EFDataMapper
 
         public void DropUser(String email)
         {
+            User user = GetUserByEmail(email);
+            if (user == null)
+                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
 
+            using (var context = new AuctionModelContainer())
+            {
+                context.setLazyFalse();
+                context.Users.Attach(user);
+                context.Entry(user).Collection(u => u.Roles).Load();
+
+                if (user.Roles.Count > 0)
+                    throw new DependencyException("User with email " + email + " has roles asigned so it can't be droped.");
+
+                context.Users.Remove(user);
+                context.SaveChanges();
+            }
         }
 
         public void AddRoleToUser(String email,Role role)
         {
             User user = GetUserByEmail(email);
             if (user == null)
-                throw new EntityNotFoundException("The user with email " + email + " does not exist.");
+                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
 
             using(var context = new AuctionModelContainer())
             {
-                user.Roles.Add(role);
-                context.Users.Attach(user);
+                context.setLazyFalse();
 
-                var entry = context.Entry(user);
-                entry.Property(u => u.Roles).IsModified = true;
+                context.Users.Attach(user);
+                context.Roles.Attach(role);
+                context.Entry(user).Collection(u => u.Roles).Load();
+                user.Roles.Add(role);
 
                 context.SaveChanges();
             }
@@ -174,7 +195,122 @@ namespace DataMapper.EFDataMapper
 
         public void RemoveRoleFromUser(String email,Role role)
         {
+            User user = GetUserByEmail(email);
+            if (user == null)
+                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
 
+            using (var context = new AuctionModelContainer())
+            {
+                context.setLazyFalse();
+                
+                context.Users.Attach(user);
+                context.Roles.Attach(role);
+                context.Entry(user).Collection(u => u.Roles).Load();
+                context.Entry(role).Collection(r => r.Users).Load();
+
+                if (!user.Roles.Contains(role))
+                   throw new EntityDoesNotExistException("User with email "+email+" hasn't the role with name "+role.Name+" so it can't be remove.");
+
+                user.Roles.Remove(role);
+  
+                context.Entry(user).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+        }
+
+        public ICollection<User> GetAllUsersThatParticipateToAnAuction(Auction auction)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                var userVar = (from user in context.Users
+                               join productAuction in context.ProductAuctions on user.IdUser equals productAuction.UserIdUser
+                               join auxAuction in context.Auctions on productAuction.AuctionIdAuction equals auxAuction.IdAuction
+                               where auxAuction.IdAuction == auction.IdAuction
+                               select user).ToList();
+                return userVar;
+            }
+        }
+
+        public ICollection<User> GetAllUsersThatGiveARaitingToAUser(User user)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                var ratingVar = (from rating in context.Ratings
+                                 join auxUser in context.Users on rating.ReceivingNoteUserId equals auxUser.IdUser
+                                 where auxUser.IdUser == user.IdUser
+                                 select rating.GivingNoteUser).ToList();
+                return ratingVar;
+            }
+        }
+
+        public void AddRating(Rating rating)
+        {
+            using(var context = new AuctionModelContainer())
+            {
+                context.Users.Attach(rating.GivingNoteUser);
+                context.Users.Attach(rating.ReceivingNoteUser);
+                
+                context.Ratings.Add(rating);
+                try
+                { 
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException exc)
+                {
+                    String message = "";
+                    IEnumerable<DbEntityValidationResult> errors = exc.EntityValidationErrors;
+                    foreach (DbEntityValidationResult error in errors)
+                        foreach (var validationError in error.ValidationErrors)
+                            message = message + " " + validationError.PropertyName + ". " + validationError.ErrorMessage;
+                    throw new ValidationException(message);
+                }
+            }
+        }
+
+        public void UpdateRating(Rating rating)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                context.Ratings.Attach(rating);
+                var entry = context.Entry(rating);
+                entry.Property(r => r.Grade).IsModified = true;
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException exc)
+                {
+                    String message = "";
+                    IEnumerable<DbEntityValidationResult> errors = exc.EntityValidationErrors;
+                    foreach (DbEntityValidationResult error in errors)
+                        foreach (var validationError in error.ValidationErrors)
+                            message = message + " " + validationError.PropertyName + ". " + validationError.ErrorMessage;
+                    throw new ValidationException(message);
+                }
+            }
+        }
+
+        public Rating GetRating(User givingRating,User receivingRating)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                var ratingVar = (from rating in context.Ratings
+                                 where rating.ReceivingNoteUser.Email.Equals(receivingRating.Email) && rating.GivingNoteUser.Email.Equals(givingRating.Email)
+                                 select rating).FirstOrDefault();
+                return ratingVar;
+            }
+        }
+
+        public ICollection<Rating> GetAllRatingsOfAnUser(User user)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                var ratingVar = (from rating in context.Ratings
+                                 where rating.ReceivingNoteUser.Email.Equals(user.Email)
+                                 select rating).ToList();
+                return ratingVar;
+            }
         }
     }
 }
