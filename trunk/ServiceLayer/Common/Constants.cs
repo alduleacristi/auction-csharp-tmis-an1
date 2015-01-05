@@ -13,5 +13,8 @@ namespace ServiceLayer.Common
         public static readonly string NR_OF_DAYS_USED_TO_DETERMINE_RATING = "n";
         public static readonly string RATING_THRESH_HOLD_FOR_AUCTION = "t";
         public static readonly string NR_OF_DAY_BEFORE_RATING_RESET = "l";
+
+        public static readonly string OWNER = "owner";
+        public static readonly string ACTIONEER = "actioneer";
     }
 }
