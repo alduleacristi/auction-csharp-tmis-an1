@@ -9,6 +9,9 @@ using Microsoft.Practices.EnterpriseLibrary.Validation;
 using DomainModel;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.Objects;
 
 namespace DataMapper.EFDataMapper
 {
@@ -22,36 +25,37 @@ namespace DataMapper.EFDataMapper
                 if (category.ParentCategory != null)
                     context.Categories.Attach(category.ParentCategory);
                 if (category.ParentCategory != null)
-                {
-                     Category parent = this.GetCategoryById(category.ParentCategory.IdCategory);
+                { 
+                    Category parent = this.GetCategoryById(category.ParentCategory.IdCategory);
                      if(parent == null)
                     {
                         throw new EntityDoesNotExistException("Parent does not exists!");
                     }
                 }
-
                 Category auxCateg = this.GetCategoryByName(category.Name);
                 if (category.ParentCategory != null)
                 {
-                    Console.WriteLine("verify parent h");
                     if (this.exists(category.ParentCategory.IdCategory, category.Name))
                         throw new DuplicateException("You can not add two categories with the same name (" + category.Name + ").");
                 }
                 else
                 {
-                    Console.WriteLine("verify in roots");
                     if (this.verifyNameInRoots(category.Name))
                        throw new DuplicateException("You can not add two categories with the same name (" + category.Name + ").");
                 }
             
                  context.Categories.Add(category);
-                    try
-                    {
-                        context.SaveChanges();
-                    }catch(DbEntityValidationException exc)
-                    {
-                        throw new ValidationException("Invalid category's name/description.");
-                    }
+                 try
+                 {
+                     context.SaveChanges();
+                 }
+                 catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+                 {
+                     IEnumerable<DbEntityValidationResult> errors = ex.EntityValidationErrors;
+                     foreach (DbEntityValidationResult error in errors)
+                         foreach (var validationError in error.ValidationErrors)
+                             Console.WriteLine(validationError.PropertyName + ". " + validationError.ErrorMessage);
+                 }
                 }
             }
 
@@ -95,8 +99,14 @@ namespace DataMapper.EFDataMapper
         {
             using(var context = new AuctionModelContainer())
             {
+                context.setLazyFalse();
                 var categVar = (from category in context.Categories where category.Name.Equals(name)
                                   select category).FirstOrDefault();
+                if (categVar != null)
+                {
+                    context.Categories.Attach(categVar);
+                    context.Entry(categVar).Collection(categ => categ.Products).Load();
+                }
                 return categVar;
             }
         }
@@ -108,70 +118,48 @@ namespace DataMapper.EFDataMapper
                 context.setLazyFalse();
                 var categVar = (from category in context.Categories where category.IdCategory == id 
                                 select category).FirstOrDefault();
+                if (categVar != null)
+                {
+                    context.Categories.Attach(categVar);
+                    context.Entry(categVar).Collection(categ => categ.Products).Load();
+                }
                 return categVar;
             }
         }
 
-        public void UpdateCategory(int id, String newName)
+        public void UpdateCategory(Category category, String newName)
         {
-            Category category = this.GetCategoryById(id);
-            if (category == null)
-            {
-                throw new EntityDoesNotExistException("Category does not exists!");
-            }
-
-            if (!category.Name.Equals(newName))
-            {
                 Category auxCateg = this.GetCategoryByName(newName);
-                if (this.exists(category.ParentCategory.IdCategory, newName))
-                    throw new DuplicateException("You can not add two categories with the same name (" + newName + ").");
+                if (category.IdParentCategory != null)
+                    category.ParentCategory = this.GetCategoryById((int)category.IdParentCategory);
+                if (category.ParentCategory != null)
+                {
+                    if (this.exists(category.ParentCategory.IdCategory, newName))
+                        throw new DuplicateException("You can not add two categories with the same name (" + newName + ").");
+                }
+                else
+                {
+                    if (this.verifyNameInRoots(newName))
+                        throw new DuplicateException("You can not add two categories with the same name (" + newName + ").");
+                }
                 category.Name = newName;
                 using (var context = new AuctionModelContainer())
                 {
                     context.Categories.Attach(category);
                     var entry = context.Entry(category);
                     entry.Property(r => r.Name).IsModified = true;
-
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (DbEntityValidationException exc)
-                    {
-                        throw new ValidationException("Invalid category's name.");
-                    }
+                    context.SaveChanges();
                 }
-            }
         }
-        public void UpdateCategoryDescription(int id, String description)
+        public void UpdateCategoryDescription(Category category, String description)
         {
-            Category category = this.GetCategoryById(id);
-            if (category == null)
+            category.Description = description;
+            using (var context = new AuctionModelContainer())
             {
-                throw new EntityDoesNotExistException("Category does not exists!");
-            }
-
-            //if (!description.Equals(null) && !category.Description.Equals(null))
-            {
-                //if (!category.Description.Equals(description))
-                {
-                    category.Description = description;
-                    using (var context = new AuctionModelContainer())
-                    {
-                        context.Categories.Attach(category);
-                        var entry = context.Entry(category);
-                        entry.Property(r => r.Description).IsModified = true;
-
-                        try
-                        {
-                            context.SaveChanges();
-                        }
-                        catch (DbEntityValidationException exc)
-                        {
-                            throw new ValidationException("Invalid category's description.");
-                        }
-                    }
-                }
+               context.Categories.Attach(category);
+               var entry = context.Entry(category);
+               entry.Property(r => r.Description).IsModified = true;
+               context.SaveChanges();
             }
         }
 
@@ -206,15 +194,18 @@ namespace DataMapper.EFDataMapper
 
                 return context.Database
                     .SqlQuery<Category>("dbo.categories_FindChildren @parent_id", clientIdParameter)
-                    .ToList();
-             }
+                   .ToList();             }
         }
         public ICollection<Category> getParents(int idCategory)
         {
             using(var context = new AuctionModelContainer())
              {
                 var clientIdParameter = new SqlParameter("@lCategoryID", idCategory);
-
+                if (this.GetCategoryById(idCategory) == null)
+                {
+                    ICollection<Category> categories = new HashSet<Category>();
+                    return categories;
+                }
                 return context.Database
                     .SqlQuery<Category>("dbo.categories_GetCatParentsNew @lCategoryID", clientIdParameter)
                     .ToList();

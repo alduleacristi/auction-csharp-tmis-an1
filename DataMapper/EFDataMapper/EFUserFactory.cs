@@ -312,5 +312,17 @@ namespace DataMapper.EFDataMapper
                 return ratingVar;
             }
         }
-    }
+        public User GetUserById(int id)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                context.setLazyFalse();
+                var userVar = (from user in context.Users
+                               where user.IdUser.Equals(id)
+                               select user).FirstOrDefault();
+                context.Users.Attach(userVar);
+                context.Entry(userVar).Collection(user => user.Roles).Load();
+                return userVar;
+            }
+        }    }
 }

@@ -31,14 +31,7 @@ namespace DataMapper.EFDataMapper
                 return new EFProductFactory();
             }
         }
-
-
-
-
-
-
-
- public IUserFactory UserFactory
+        public IUserFactory UserFactory
         {
             get
             {
@@ -60,5 +53,22 @@ namespace DataMapper.EFDataMapper
             {
                 return new EFAuctionFactory();
             }
-        }    }
+        }
+
+        public IProductAuctionFactory ProductAuctionFactory
+        {
+            get
+            {
+                return new EFProductAuctionFactory();
+            }
+        }
+
+        public ICurrencyFactory CurrencyFactory
+        {
+            get
+            {
+                return new EFCurrencyFactory();
+            }
+        }
+    }
 }
