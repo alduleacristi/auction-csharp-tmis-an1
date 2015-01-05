@@ -10,20 +10,12 @@
 namespace DomainModel
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Currency
+    public partial class categories_GetCatParentsNew_Result
     {
-        public Currency()
-        {
-            this.Auctions = new HashSet<Auction>();
-            this.ProductActions = new HashSet<ProductAuction>();
-        }
-    
-        public int IdCurrency { get; set; }
+        public int IdCategory { get; set; }
         public string Name { get; set; }
-    
-        public virtual ICollection<Auction> Auctions { get; set; }
-        public virtual ICollection<ProductAuction> ProductActions { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> IdParentCategory { get; set; }
     }
 }

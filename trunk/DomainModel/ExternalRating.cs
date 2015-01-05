@@ -9,26 +9,14 @@ using System.Threading.Tasks;
 
 namespace DomainModel
 {
-    [MetadataType(typeof(UserMetadata))]
-    public partial class User
+    [MetadataType(typeof(RatingMetadata))]
+    public partial class Rating
     {
         [SelfValidation]
         public void CustomValidate(ValidationResults results)
         {
             // Call the ProductMetadata class validation code
-            UserMetadata.Validate(this, results);
-        }
-
-        public override bool Equals(Object obj)
-        {
-            if (obj == null)
-                return false;
-
-            User user = (User) obj;
-            if (this.Email.Equals(user.Email) && this.FirstName.Equals(user.FirstName) && this.LastName.Equals(user.LastName))
-                return true;
-
-            return false;
+            RatingMetadata.Validate(this, results);
         }
     }
 }

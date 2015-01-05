@@ -59,6 +59,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="categories_FindChildren_Result.cs">
+      <DependentUpon>AuctionModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="categories_GetCatParentsNew_Result.cs">
+      <DependentUpon>AuctionModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Category.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
@@ -71,12 +77,13 @@
     </Compile>
     <Compile Include="ExternalCategory.cs" />
     <Compile Include="ExternalProduct.cs" />
+    <Compile Include="ExternalRating.cs" />
     <Compile Include="ExternalRole.cs" />
     <Compile Include="ExternalUser.cs" />
     <Compile Include="Product.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProductAction.cs">
+    <Compile Include="ProductAuction.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ProductMetadata.cs" />
@@ -84,6 +91,7 @@
     <Compile Include="Rating.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RatingMetadata.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>

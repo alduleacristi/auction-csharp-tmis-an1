@@ -17,9 +17,10 @@ namespace DomainModel
         public User()
         {
             this.Roles = new HashSet<Role>();
-            this.Ratings = new HashSet<Rating>();
+            this.GivedRatings = new HashSet<Rating>();
             this.Auctions = new HashSet<Auction>();
-            this.ProductActions = new HashSet<ProductAction>();
+            this.ProductAuctions = new HashSet<ProductAuction>();
+            this.RecivedRatings = new HashSet<Rating>();
         }
     
         public int IdUser { get; set; }
@@ -28,8 +29,9 @@ namespace DomainModel
         public string Email { get; set; }
     
         public virtual ICollection<Role> Roles { get; set; }
-        public virtual ICollection<Rating> Ratings { get; set; }
+        public virtual ICollection<Rating> GivedRatings { get; set; }
         public virtual ICollection<Auction> Auctions { get; set; }
-        public virtual ICollection<ProductAction> ProductActions { get; set; }
+        public virtual ICollection<ProductAuction> ProductAuctions { get; set; }
+        public virtual ICollection<Rating> RecivedRatings { get; set; }
     }
 }
