@@ -21,5 +21,5 @@ namespace ServiceLayer
         void UpdateRating(User givingRating,User receivingRating, int note);
         Rating GetRating(User givingRating, User receivingRating);
         ICollection<Rating> GetAllRatingsOfAnUser(User user);
-    }
+        User GetUserById(int id);    }
 }
