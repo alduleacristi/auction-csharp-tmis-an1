@@ -18,5 +18,6 @@ namespace ServiceLayer
 
         ICollection<Category> getChildren(int idCategory);
         ICollection<Category> getParents(int idCategory);
+        ICollection<Category> GetCategorysForAProduct(Product product);
     }
 }
