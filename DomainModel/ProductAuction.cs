@@ -12,24 +12,16 @@ namespace DomainModel
     using System;
     using System.Collections.Generic;
     
-    public partial class Auction
+    public partial class ProductAuction
     {
-        public Auction()
-        {
-            this.ProductActions = new HashSet<ProductAuction>();
-        }
-    
-        public int IdAuction { get; set; }
-        public System.DateTime BeginDate { get; set; }
-        public System.DateTime EndDate { get; set; }
-        public double StartPrice { get; set; }
-        public bool Finished { get; set; }
+        public int IdProductAction { get; set; }
+        public double Price { get; set; }
+        public System.DateTime Date { get; set; }
+        public int AuctionIdAuction { get; set; }
         public int UserIdUser { get; set; }
-        public int CurrencyIdCurrency { get; set; }
     
-        public virtual Product Product { get; set; }
-        public virtual User User { get; set; }
+        public virtual Auction Auction { get; set; }
         public virtual Currency Currency { get; set; }
-        public virtual ICollection<ProductAuction> ProductActions { get; set; }
+        public virtual User User { get; set; }
     }
 }

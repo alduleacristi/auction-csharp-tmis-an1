@@ -17,9 +17,10 @@ namespace DomainModel
         public int Id { get; set; }
         public int Grade { get; set; }
         public System.DateTime Date { get; set; }
-        public int UserIdUser { get; set; }
-        public int UserIdUser1 { get; set; }
+        public int GivingNoteUserId { get; set; }
+        public int ReceivingNoteUserId { get; set; }
     
-        public virtual User User { get; set; }
+        public virtual User GivingNoteUser { get; set; }
+        public virtual User ReceivingNoteUser { get; set; }
     }
 }
