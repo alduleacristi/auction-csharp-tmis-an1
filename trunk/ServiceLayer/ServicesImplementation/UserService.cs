@@ -285,5 +285,9 @@ namespace ServiceLayer.ServicesImplementation
         {
             return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetAllRatingsOfAnUser(user);
         }
-    }
+        public User GetUserById(int id)
+        {
+            logger.logInfo("Try to get user by id from the db.");
+            return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetUserById(id);
+        }    }
 }

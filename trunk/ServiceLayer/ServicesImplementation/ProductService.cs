@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Practices.EnterpriseLibrary.Validation;
 
 namespace ServiceLayer
 {
@@ -17,25 +18,62 @@ namespace ServiceLayer
         {
             logger = AuctionLogger.GetInstance();
         }
-        public void AddProduct(Product product)
+        public bool AddProduct(Product product)
         {
             logger.logInfo("Try to add a new product in db.");
-
-            try
+            if (product == null)
             {
-                DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.AddProduct(product);
+                ValidationException e = new ValidationException("Product is null");
+                logger.logError(e);
+                throw e;
             }
-            catch (ValidationException validationException)
+            if (product.Categories == null)
             {
-                logger.logError(validationException);
-                throw validationException;
+                ValidationException e = new ValidationException("Product's categories are null");
+                logger.logError(e);
+                throw e;
             }
-            catch (DuplicateException duplicateException)
+            CategoryService categoryService = new CategoryService();
+            foreach (Category categ in product.Categories)
             {
-                logger.logError(duplicateException);
-                throw duplicateException;
+                if (categoryService.GetCategoryById(categ.IdCategory) == null)
+                {
+                    EntityDoesNotExistException e = new EntityDoesNotExistException("One or more categories of the product do not exist");
+                    logger.logError(e);
+                    throw e;
+                }
             }
+            var validationResults = Validation.Validate<Product>(product);
+            if (product.Name != null)
+            {
+                if (!validationResults.IsValid)
+                {
+                    ValidationException e = new ValidationException("Invalid product's name/description.");
+                    logger.logError(e);
+                    throw e;
+                }
+                else
+                {
+                    try
+                    {
+                        DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.AddProduct(product);
+                    }
+                    catch (DuplicateException duplicateException)
+                    {
+                        logger.logError(duplicateException);
+                        throw duplicateException;
+                    }
+                }
+            }
+            else
+            {
+                ValidationException e = new ValidationException("Invalid product's name - null.");
+                logger.logError(e);
+                throw e;
+            }
+            
             logger.logInfo("Product added successfully!");
+            return true;
         }
         public ICollection<Product> GetProductsByNameAndDescription(String name, String description)
         {
@@ -43,19 +81,100 @@ namespace ServiceLayer
         }
         public Product GetProductById(int id)
         {
-            return null;
+            logger.logInfo("Try to get product by id from the db.");
+            return DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.GetProdctById(id);
         }
-        public void UpdateProduct(int id, String newName)
+        public bool UpdateProduct(int id, String newName)
         {
+            logger.logInfo("Try to update product whit the id " + id);
 
+            Product product = this.GetProductById(id);
+            if (product == null)
+            {
+                EntityDoesNotExistException e = new EntityDoesNotExistException("Product is null");
+                logger.logError(e);
+                throw e;
+            }
+            if (product.Name != newName)
+            {
+                String oldName = product.Name;
+                product.Name = newName;
+                var validationResults = Validation.Validate<Product>(product);
+                if (newName != null)
+                {
+                    if (validationResults.IsValid)
+                    {
+                        product.Name = oldName;
+                        try
+                        {
+                            DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.UpdateProduct(product, newName);
+                        }
+                        catch (DuplicateException duplicateException)
+                        {
+                            logger.logError(duplicateException);
+                            throw duplicateException;
+                        }
+                        catch (EntityDoesNotExistException entityDoesNotExist)
+                        {
+                            logger.logError(entityDoesNotExist);
+                            throw entityDoesNotExist;
+                        }
+                    }
+                    else
+                    {
+                        ValidationException e = new ValidationException("Invalid product's name.");
+                        logger.logError(e);
+                        throw e;
+                    }
+                }
+                else
+                {
+                    ValidationException e = new ValidationException("Invalid product's name.");
+                    logger.logError(e);
+                    throw e;
+                }
+            }
+            else logger.logInfo("Product has the same name");
+            logger.logInfo("Product successfully updated");
+            return true;
         }
         public void UpdateProductDescription(int id, String description)
         {
-
+            logger.logInfo("Try to update product whit the id " + id);
+            try
+            {
+                DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.UpdateProductDescription(id, description);
+            }
+            catch (ValidationException validationException)
+            {
+                logger.logError(validationException);
+                throw validationException;
+            }
+            catch (EntityDoesNotExistException entityDoesNotExist)
+            {
+                logger.logError(entityDoesNotExist);
+                throw entityDoesNotExist;
+            }
+            logger.logInfo("Product successfully updated");
         }
         public void DeleteProduct(int id)
         {
-
+            logger.logInfo("Try to delete product whit the id " + id);
+            try
+            {
+                DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.DeleteProduct(id);
+            }
+            catch (EntityDoesNotExistException entityDoesNotExist)
+            {
+                logger.logError(entityDoesNotExist);
+                throw entityDoesNotExist;
+            }
+            catch (DependencyException dependencyException)
+            {
+                logger.logError(dependencyException);
+                throw dependencyException;
+            }
+            logger.logInfo("Product successfully deleted!");
         }
 
         public ICollection<Product> GetAllProductsOfACategory(Category category)
