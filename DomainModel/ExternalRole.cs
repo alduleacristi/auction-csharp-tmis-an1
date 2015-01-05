@@ -17,6 +17,7 @@ namespace DomainModel
         {
             // Call the ProductMetadata class validation code
              RoleMetadata.Validate(this, results);
+     
         }
     }
 }

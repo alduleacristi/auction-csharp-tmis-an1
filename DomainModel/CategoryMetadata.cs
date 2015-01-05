@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DomainModel
 {
     [HasSelfValidation]
-    class CategoryMetadata
+    public class CategoryMetadata
     {
         [NotNullValidator(MessageTemplate = "The name of the category cannot be null")]
         [StringLengthValidator(3, RangeBoundaryType.Inclusive, 30, RangeBoundaryType.Inclusive, ErrorMessage = "The category's name should have between {3} and {30} characters")]
@@ -19,7 +19,7 @@ namespace DomainModel
             set;
         }
         
-        [StringLengthValidator(0, RangeBoundaryType.Inclusive, 300, RangeBoundaryType.Inclusive, ErrorMessage = "The category's description should have between {0} and {300} characters")]
+        [StringLengthValidator(0, RangeBoundaryType.Inclusive, 200, RangeBoundaryType.Inclusive, ErrorMessage = "The category's description should have between {0} and {300} characters")]
         public String Description
         {
             get;
@@ -28,11 +28,11 @@ namespace DomainModel
 
         internal static void Validate(Category category, ValidationResults results)
         {
-            if (true)//some business-logic derived condition
+            if ( category.Name.Length < 3 || category.Name.Length > 30 || category.Description.Length > 200)//some business-logic derived condition
             {
                 results.AddResult
                     (
-                        new ValidationResult("some reason from SelfValidation method", category, "ValidateMethod", "error", null)
+                        new ValidationResult("Invalid category's name/description.", category, "ValidateMethod", "error", null)
                     );
             }
         }
