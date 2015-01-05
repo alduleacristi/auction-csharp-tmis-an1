@@ -12,7 +12,7 @@ namespace DataMapper
         void AddProduct(Product product);
         ICollection<Product> GetProdctByNameAndDescription(String name, String description);
         Product GetProdctById(int id);
-        void UpdateProduct(int id, String newName);
+        void UpdateProduct(Product product, String newName);
         void UpdateProductDescription(int id, String description);
         void DeleteProduct(int id);
         ICollection<Product> GetAllProductsOfACategory(Category category);

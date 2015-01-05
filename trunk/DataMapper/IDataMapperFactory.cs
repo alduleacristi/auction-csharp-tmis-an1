@@ -39,6 +39,14 @@ namespace DataMapper
         }
 
 
+        IProductAuctionFactory ProductAuctionFactory
+        {
+            get;
+        }
 
+        ICurrencyFactory CurrencyFactory
+        {
+            get;
+        }
     }
 }

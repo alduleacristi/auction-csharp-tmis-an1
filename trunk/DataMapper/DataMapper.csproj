@@ -71,13 +71,17 @@
     <Compile Include="EFDataMapper\EFCategoryFactory.cs" />
     <Compile Include="EFDataMapper\EFAuctionFactory.cs" />
     <Compile Include="EFDataMapper\EFConfigurationFactory.cs" />
+    <Compile Include="EFDataMapper\EFCurrencyFactory.cs" />
     <Compile Include="EFDataMapper\EFDataMapperFactory.cs" />
+    <Compile Include="EFDataMapper\EFProductAuctionFactory.cs" />
     <Compile Include="EFDataMapper\EFProductFactory.cs" />
     <Compile Include="EFDataMapper\EFRoleFactory.cs" />
     <Compile Include="EFDataMapper\EFUserFactory.cs" />
     <Compile Include="EFDataMapper\ExternalAuctionModelContainer.cs" />
     <Compile Include="IAuctionFactory.cs" />
     <Compile Include="IConfigurationFactory.cs" />
+    <Compile Include="ICurrencyFactory.cs" />
+    <Compile Include="IProductAuctionFactory.cs" />
     <Compile Include="IUserFactory.cs" />
     <Compile Include="Exceptions\AuctionException.cs" />
     <Compile Include="Exceptions\DependencyException.cs" />
