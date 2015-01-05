@@ -9,10 +9,10 @@ namespace ServiceLayer
 {
     public interface IProductService
     {
-        void AddProduct(Product product);
+        bool AddProduct(Product product);
         ICollection<Product> GetProductsByNameAndDescription(String name, String description);
         Product GetProductById(int id);
-        void UpdateProduct(int id, String newName);
+        bool UpdateProduct(int id, String newName);
         void UpdateProductDescription(int id, String description);
         void DeleteProduct(int id);
         ICollection<Product> GetAllProductsOfACategory(Category category);
