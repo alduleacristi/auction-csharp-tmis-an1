@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DomainModel
 {
     [HasSelfValidation]
-    class ProductMetadata
+    public class ProductMetadata
     {
         [NotNullValidator(MessageTemplate = "The name of the product cannot be null")]
         [StringLengthValidator(3, RangeBoundaryType.Inclusive, 30, RangeBoundaryType.Inclusive, ErrorMessage = "The product's name should have between {3} and {30} characters")]
@@ -28,11 +28,11 @@ namespace DomainModel
 
         internal static void Validate(Product product, ValidationResults results)
         {
-            if (true)//some business-logic derived condition
+            if (product.Name.Length < 3 || product.Name.Length > 30 || product.Description.Length > 200)//some business-logic derived condition
             {
                 results.AddResult
                     (
-                        new ValidationResult("some reason from SelfValidation method", product, "ValidateMethod", "error", null)
+                        new ValidationResult("Invalid product's name/description.", product, "ValidateMethod", "error", null)
                     );
             }
         }

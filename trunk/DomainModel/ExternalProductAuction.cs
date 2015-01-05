@@ -9,14 +9,17 @@ using System.Threading.Tasks;
 
 namespace DomainModel
 {
-    [MetadataType(typeof(CategoryMetadata))]
-    public partial class Category
+    [MetadataType(typeof(ProductAuctionMetadata))]
+    public partial class ProductAuction
     {
         [SelfValidation]
         public void CustomValidate(ValidationResults results)
         {
-            // Call the CategoryMetadata class validation code
-            CategoryMetadata.Validate(this, results);
+            // Call the ProductAuctionMetadata class validation code
+            
+            //validarea currency-ului
+            //validarea pretului
+            ProductAuctionMetadata.Validate(this, results);
         }
     }
 }
