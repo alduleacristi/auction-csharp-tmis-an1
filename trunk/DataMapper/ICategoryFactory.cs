@@ -18,5 +18,6 @@ namespace DataMapper
 
         ICollection<Category> getChildren(int idCategory);
         ICollection<Category> getParents(int idCategory);
+        ICollection<Category> GetAllCategoryForAProduct(Product product);
     }
 }

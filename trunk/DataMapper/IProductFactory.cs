@@ -15,5 +15,7 @@ namespace DataMapper
         void UpdateProduct(int id, String newName);
         void UpdateProductDescription(int id, String description);
         void DeleteProduct(int id);
+        ICollection<Product> GetAllProductsOfACategory(Category category);
+        Auction GetAuctionOfAProduct(Product product);
     }
 }

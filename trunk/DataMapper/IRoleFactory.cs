@@ -13,5 +13,6 @@ namespace DataMapper
         Role GetRoleByName(String name);
         void UpdateRole(String oldRoleName,String newRoleName);
         void DropRole(String roleName);
+        ICollection<Role> GetAllRolesOfAnUser(User user);
     }
 }
