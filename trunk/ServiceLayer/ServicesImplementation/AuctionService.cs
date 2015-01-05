@@ -94,7 +94,7 @@ namespace ServiceLayer.ServicesImplementation
             if(nrOfAuctions > configuration.GetValue(Constants.MAX_NR_OF_AUCTION_ASSOCIATE_WITH_CATEGORY))
                 throw new AuctionException("The auction can not be added because the number of auctions per category was exceeded");
         }
-        public void AddNewAuction(User user,Product product,Currency currency,double startPrice,DateTime startDate,DateTime endDate)
+public void AddNewAuction(User user,Product product,Currency currency,double startPrice,DateTime startDate,DateTime endDate)
         {
             try 
             {
@@ -139,5 +139,9 @@ namespace ServiceLayer.ServicesImplementation
         {
             return DataMapperFactoryMethod.GetCurrentFactory().AuctionFactory.GetNumberOfActiveAuctionsStartedByUser(user);
         }
-    }
+        public Auction GetAuctionById(int id)
+        {
+            //logger.logInfo("Try to get auction by id from the db.");
+            return DataMapperFactoryMethod.GetCurrentFactory().AuctionFactory.GetAuctionById(id);
+        }    }
 }
