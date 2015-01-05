@@ -12,5 +12,6 @@ namespace DataMapper
         void AddNewAuction(Auction auction);
         Currency GetCurrencyByName(String currencyName);
         int GetNumberOfActiveAuctionsStartedByUser(User user);
+        Auction GetAuctionById(int id);
     }
 }

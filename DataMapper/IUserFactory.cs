@@ -17,11 +17,11 @@ namespace DataMapper
         void DropUser(String email);
         void AddRoleToUser(String email,Role role);
         void RemoveRoleFromUser(String email, Role role);
-        ICollection<User> GetAllUsersThatParticipateToAnAuction(Auction auction);
+ICollection<User> GetAllUsersThatParticipateToAnAuction(Auction auction);
         ICollection<User> GetAllUsersThatGiveARaitingToAUser(User user);
         void AddRating(Rating rating);
         ICollection<Rating> GetAllRatingsOfAnUser(User user);
         void UpdateRating(Rating rating);
         Rating GetRating(User givingRating, User receivingRating);
-    }
+        User GetUserById(int id);    }
 }
