@@ -9,6 +9,8 @@ namespace DataMapper
 {
     public interface IAuctionFactory
     {
-        void AddNewAuction(Auction auction,User user);
+        void AddNewAuction(Auction auction);
+        Currency GetCurrencyByName(String currencyName);
+        int GetNumberOfActiveAuctionsStartedByUser(User user);
     }
 }

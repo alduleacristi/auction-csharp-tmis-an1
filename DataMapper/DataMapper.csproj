@@ -83,7 +83,6 @@
     <Compile Include="Exceptions\DependencyException.cs" />
     <Compile Include="Exceptions\DuplicateException.cs" />
     <Compile Include="Exceptions\EntityDoesNotExistException.cs" />
-    <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="ICategoryFactory.cs" />
     <Compile Include="IDataMapperFactory.cs" />
