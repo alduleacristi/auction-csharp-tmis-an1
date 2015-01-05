@@ -43,6 +43,18 @@ namespace DataMapper.EFDataMapper
 
                 return nr;
             }
-        }
-    }
+        }        public Auction GetAuctionById(int id)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                context.setLazyFalse();
+                var auctionVar = (from auction in context.Auctions
+                               where auction.IdAuction.Equals(id)
+                               select auction).FirstOrDefault();
+                context.Auctions.Attach(auctionVar);
+                //context.Entry(auctionVar).Collection(pAux => pAux.Categories).Load();
+                context.Entry(auctionVar).Reference(pAux => pAux.Product).Load();
+                return auctionVar;
+            }
+        }    }
 }
