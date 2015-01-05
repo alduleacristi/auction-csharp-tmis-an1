@@ -19,6 +19,11 @@ namespace ServiceLayer.ServicesImplementation
             logger = AuctionLogger.GetInstance();
         }
 
+        public User GetUserByEmail(String email)
+        {
+            return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetUserByEmail(email);
+        }
+
         public void AddUser(User user)
         {
             logger.logInfo("Try to add a new user.");
@@ -49,7 +54,7 @@ namespace ServiceLayer.ServicesImplementation
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateFirstName(email, newFirstName);
                 logger.logInfo("First name was succesfully changed to " + newFirstName);
             }
-            catch (EntityNotFoundException entityNotFound)
+            catch (EntityDoesNotExistException entityNotFound)
             {
                 logger.logError(entityNotFound);
                 throw entityNotFound;
@@ -70,7 +75,7 @@ namespace ServiceLayer.ServicesImplementation
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateLastName(email, newLastName);
                 logger.logInfo("Last name was succesfully changed to " + newLastName);
             }
-            catch (EntityNotFoundException entityNotFound)
+            catch (EntityDoesNotExistException entityNotFound)
             {
                 logger.logError(entityNotFound);
                 throw entityNotFound;
@@ -91,7 +96,7 @@ namespace ServiceLayer.ServicesImplementation
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateEmail(oldEmail, newEmail);
                 logger.logInfo("Email was succesfully changed to " + newEmail);
             }
-            catch (EntityNotFoundException entityNotFound)
+            catch (EntityDoesNotExistException entityNotFound)
             {
                 logger.logError(entityNotFound);
                 throw entityNotFound;
@@ -110,17 +115,175 @@ namespace ServiceLayer.ServicesImplementation
 
         public void DropUser(String email)
         {
+            logger.logInfo("Try to drop user with email " + email);
 
+            try 
+            {
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.DropUser(email);
+                logger.logInfo("TUser with email " + email+" was succesfully removed");
+            }
+            catch (EntityDoesNotExistException entityNotFound)
+            {
+                logger.logError(entityNotFound);
+                throw entityNotFound;
+            }
+            catch (DependencyException dependecyException)
+            {
+                logger.logError(dependecyException);
+                throw dependecyException;
+            }
         }
 
         public void AddRoleToUser(String email,Role role)
         {
+            logger.logInfo("Try to add role " +role.Name+" to user with email " + email);
             DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddRoleToUser(email,role);
+            logger.logInfo("Role " + role.Name + " was succesfully assigned to user with email " + email);
         }
 
         public void RemoveRoleFromUser(String email,Role role)
         {
+            logger.logInfo("Try to remove role" + role.Name + " from user with email " + email);
 
+            try 
+            { 
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.RemoveRoleFromUser(email, role);
+                logger.logInfo("Role" + role.Name + " was succesfully removed from user with email " + email);
+            }
+            catch(EntityDoesNotExistException exc)
+            {
+                logger.logError(exc);
+                throw exc;
+            }
+        }
+
+        private void VerifyUsers(User givingNoteUser, User receivingNoteUser)
+        {
+            if (givingNoteUser == null)
+                throw new EntityDoesNotExistException("User which give the note must not be null");
+            User findedUser = this.GetUserByEmail(givingNoteUser.Email);
+            if (findedUser == null)
+                throw new EntityDoesNotExistException("User which give the note does not exist");
+            
+            if (receivingNoteUser == null)
+                throw new EntityDoesNotExistException("User which receive the note must not be null");
+            findedUser = this.GetUserByEmail(receivingNoteUser.Email);
+            if (findedUser == null)
+                throw new EntityDoesNotExistException("User which receive the note does not exist");
+            
+            if (givingNoteUser.Equals(receivingNoteUser))
+                throw new AuctionException("User " + givingNoteUser.Email + " can not add a note because it try to add a note to him");
+        }
+
+        private bool VerifyUsersAuctions(User givingNoteUser, User receivingNoteUser)
+        {
+            ICollection<Auction> auctions = receivingNoteUser.Auctions;
+            foreach(Auction auction in auctions)
+            {
+                ICollection<User> users = DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetAllUsersThatParticipateToAnAuction(auction);
+                foreach (User user in users)
+                {
+                    if (user.Equals(givingNoteUser))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void AddNoteToUser(User givingNoteUser, User receivingNoteUser, int note)
+        {
+            try 
+            {
+                VerifyUsers(givingNoteUser, receivingNoteUser);
+
+                logger.logInfo("User " + givingNoteUser.Email + " try to add note " + note + " to user with email " + receivingNoteUser);
+
+                if (!VerifyUsersAuctions(givingNoteUser, receivingNoteUser))
+                    throw new AuctionException("User "+givingNoteUser.Email+" can not add a note to user "+receivingNoteUser.Email+" because it does not participate to any auction");
+
+                ICollection<User> users = DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetAllUsersThatGiveARaitingToAUser(receivingNoteUser);
+                foreach(User user in users)
+                    if(user.Equals(givingNoteUser))
+                        throw new AuctionException("User " + givingNoteUser.Email + " can not add a note to user " + receivingNoteUser.Email + " because it already give a note to that user");
+
+                Rating persistRating = new Rating();
+                persistRating.Date = DateTime.Now;
+                persistRating.GivingNoteUser = givingNoteUser;
+                persistRating.ReceivingNoteUser = receivingNoteUser;
+                persistRating.Grade = note;
+
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddRating(persistRating);
+
+                logger.logInfo("User " + givingNoteUser.Email + " succesfully add note " + note + " to user with email " + receivingNoteUser);
+            }
+            catch (EntityDoesNotExistException exc)
+            {
+                logger.logError(exc);
+                throw exc;
+            }
+            catch(ValidationException validationException)
+            {
+                logger.logError(validationException);
+                throw validationException;
+            }
+            catch(AuctionException auctioException)
+            {
+                logger.logError(auctioException);
+                throw auctioException;
+            }
+        }
+
+        public void UpdateRating(User givingRating,User receivingRating, int note)
+        {
+            try
+            { 
+                if (givingRating == null)
+                    throw new EntityDoesNotExistException("User which give the note must not be null");
+                User findedUser = this.GetUserByEmail(givingRating.Email);
+                if (findedUser == null)
+                    throw new EntityDoesNotExistException("User which give the note does not exist");
+
+                if (receivingRating == null)
+                    throw new EntityDoesNotExistException("User which receive the note must not be null");
+                findedUser = this.GetUserByEmail(receivingRating.Email);
+                if (findedUser == null)
+                    throw new EntityDoesNotExistException("User which receive the note does not exist");
+
+                Rating oldRating = this.GetRating(givingRating,receivingRating);
+
+                if (oldRating == null)
+                    throw new AuctionException("The rating gived by user "+givingRating.Email+" to user "+receivingRating.Email+" does not exist");
+
+                oldRating.Grade = note;
+
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateRating(oldRating);
+           }
+           catch (EntityDoesNotExistException exc)
+           {
+                logger.logError(exc);
+                throw exc;
+           }
+           catch (ValidationException validationException)
+           {
+                logger.logError(validationException);
+                throw validationException;
+           }
+           catch (AuctionException auctioException)
+           {
+                logger.logError(auctioException);
+                throw auctioException;
+           }
+        }
+
+        public Rating GetRating(User givingRating,User receivingRating)
+        {
+            return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetRating(givingRating,receivingRating);
+        }
+
+        public ICollection<Rating> GetAllRatingsOfAnUser(User user)
+        {
+            return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetAllRatingsOfAnUser(user);
         }
     }
 }
