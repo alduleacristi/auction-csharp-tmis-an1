@@ -98,5 +98,34 @@ namespace DataMapper.EFDataMapper
         {
 
         }
+
+        public ICollection<Product> GetAllProductsOfACategory(Category category)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                context.Categories.Attach(category);
+                context.Entry(category).Collection(cat => cat.Products).Load();
+
+                ICollection<Product> products = category.Products;
+                return products;
+            }
+        }
+
+        public Auction GetAuctionOfAProduct(Product product)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                var auctionVar = (from auction in context.Auctions
+                                  join productSel in context.Products on auction.Product.IdProduct equals product.IdProduct
+                                  where productSel.IdProduct == product.IdProduct
+                                  select auction).FirstOrDefault();
+
+
+                 context.Auctions.Attach(auctionVar);
+                 context.Entry(auctionVar).Reference(auc => auc.User).Load();
+
+                return auctionVar;
+            }
+        }
     }
 }

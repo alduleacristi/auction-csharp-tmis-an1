@@ -65,6 +65,10 @@
       <End Role="ProductAuction" EntitySet="ProductAuctions" />
       <End Role="User" EntitySet="Users" />
     </AssociationSet>
+    <AssociationSet Name="RecievedUserRating" Association="AuctionModel.Store.RecievedUserRating">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Rating" EntitySet="Ratings" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Roles">
     <Key>
@@ -113,8 +117,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Grade" Type="int" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="UserIdUser" Type="int" Nullable="false" />
-    <Property Name="UserIdUser1" Type="int" Nullable="false" />
+    <Property Name="GivingNoteUserId" Type="int" Nullable="false" />
+    <Property Name="ReceivingNoteUserId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Products">
     <Key>
@@ -129,9 +133,9 @@
       <PropertyRef Name="IdAuction" />
     </Key>
     <Property Name="IdAuction" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BeginDate" Type="tinyint" Nullable="false" />
+    <Property Name="BeginDate" Type="datetime" Nullable="false" />
     <Property Name="EndDate" Type="datetime" Nullable="false" />
-    <Property Name="StartPrice" Type="decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="StartPrice" Type="float" Nullable="false" />
     <Property Name="Finished" Type="bit" Nullable="false" />
     <Property Name="UserIdUser" Type="int" Nullable="false" />
     <Property Name="CurrencyIdCurrency" Type="int" Nullable="false" />
@@ -196,7 +200,7 @@
         <PropertyRef Name="IdUser" />
       </Principal>
       <Dependent Role="Rating">
-        <PropertyRef Name="UserIdUser1" />
+        <PropertyRef Name="GivingNoteUserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -257,6 +261,18 @@
       </Principal>
       <Dependent Role="ProductAuction">
         <PropertyRef Name="UserIdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RecievedUserRating">
+    <End Role="User" Type="AuctionModel.Store.Users" Multiplicity="1" />
+    <End Role="Rating" Type="AuctionModel.Store.Ratings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IdUser" />
+      </Principal>
+      <Dependent Role="Rating">
+        <PropertyRef Name="ReceivingNoteUserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -368,7 +384,11 @@
             <End Role="ProductAuction" EntitySet="ProductAuctions" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          </EntityContainer>
+          <AssociationSet Name="RecievedUserRating" Association="AuctionModel.RecievedUserRating">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Rating" EntitySet="Ratings" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="IdRole" />
@@ -386,9 +406,10 @@
           <Property Name="LastName" Type="String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Roles" Relationship="AuctionModel.RoleUser" FromRole="User" ToRole="Role" />
-          <NavigationProperty Name="Ratings" Relationship="AuctionModel.RatingUser" FromRole="User" ToRole="Rating" />
+          <NavigationProperty Name="GivedRatings" Relationship="AuctionModel.RatingUser" FromRole="User" ToRole="Rating" />
           <NavigationProperty Name="Auctions" Relationship="AuctionModel.AuctionUser" FromRole="User" ToRole="Auction" />
           <NavigationProperty Name="ProductAuctions" Relationship="AuctionModel.ProductAuctionUser" FromRole="User" ToRole="ProductAuction" />
+          <NavigationProperty Name="RecivedRatings" Relationship="AuctionModel.RecievedUserRating" FromRole="User" ToRole="Rating" />
         </EntityType>
         <Association Name="RoleUser">
           <End Type="AuctionModel.Role" Role="Role" Multiplicity="*" />
@@ -442,9 +463,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Grade" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UserIdUser" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="AuctionModel.RatingUser" FromRole="Rating" ToRole="User" />
-          <Property Name="UserIdUser1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GivingNoteUser" Relationship="AuctionModel.RatingUser" FromRole="Rating" ToRole="User" />
+          <Property Name="GivingNoteUserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ReceivingNoteUser" Relationship="AuctionModel.RecievedUserRating" FromRole="Rating" ToRole="User" />
+          <Property Name="ReceivingNoteUserId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -462,9 +484,9 @@
           </Key>
           <Property Name="IdAuction" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Product" Relationship="AuctionModel.AuctionProduct" FromRole="Auction" ToRole="Product" />
-          <Property Name="BeginDate" Type="Byte" Nullable="false" />
+          <Property Name="BeginDate" Type="DateTime" Nullable="false" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="StartPrice" Type="Decimal" Nullable="false" Scale="0" Precision="18" />
+          <Property Name="StartPrice" Type="Double" Nullable="false" />
           <Property Name="Finished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="User" Relationship="AuctionModel.AuctionUser" FromRole="Auction" ToRole="User" />
           <Property Name="UserIdUser" Type="Int32" Nullable="false" />
@@ -497,7 +519,7 @@
               <PropertyRef Name="IdUser" />
             </Principal>
             <Dependent Role="Rating">
-              <PropertyRef Name="UserIdUser1" />
+              <PropertyRef Name="GivingNoteUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -569,7 +591,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        </Schema>
+        <Association Name="RecievedUserRating">
+          <End Type="AuctionModel.User" Role="User" Multiplicity="1" />
+          <End Type="AuctionModel.Rating" Role="Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="IdUser" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="ReceivingNoteUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -626,8 +660,8 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Grade" ColumnName="Grade" />
           <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="UserIdUser" ColumnName="UserIdUser" />
-          <ScalarProperty Name="UserIdUser1" ColumnName="UserIdUser1" />
+          <ScalarProperty Name="GivingNoteUserId" ColumnName="GivingNoteUserId" />
+          <ScalarProperty Name="ReceivingNoteUserId" ColumnName="ReceivingNoteUserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

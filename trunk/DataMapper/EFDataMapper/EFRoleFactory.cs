@@ -48,7 +48,7 @@ namespace DataMapper.EFDataMapper
         {
             Role role = this.GetRoleByName(oldRoleName);
             if (role == null)
-                throw new EntityNotFoundException("The role with name " + oldRoleName + " does not exist.");
+                throw new EntityDoesNotExistException("The role with name " + oldRoleName + " does not exist.");
 
             if (!oldRoleName.Equals(newRoleName))
             {
@@ -79,13 +79,35 @@ namespace DataMapper.EFDataMapper
         {
             Role role = this.GetRoleByName(roleName);
             if (role == null)
-                throw new EntityNotFoundException("The role with name " + roleName + " does not exist.");
+                throw new EntityDoesNotExistException("The role with name " + roleName + " does not exist.");
 
             using (var context = new AuctionModelContainer())
             {
                 context.Roles.Attach(role);
                 context.Roles.Remove(role);
                 context.SaveChanges();
+            }
+        }
+
+        public ICollection<Role> GetAllRolesOfAnUser(User user)
+        {
+            using(var context = new AuctionModelContainer())
+            {
+                var roleVar = (from role in context.Roles
+                               select role).ToList();
+
+                for (int i = 0; i < roleVar.Count;i++ )
+                {
+                    ICollection<User> users = roleVar.ElementAt(i).Users;
+                    bool ok = false;
+                    foreach (User userFor in users)
+                        if (userFor.Email.Equals(user.Email))
+                            ok = true;
+                    if(!ok)
+                        roleVar.Remove(roleVar.ElementAt(i));
+                }
+
+                return roleVar;
             }
         }
     }

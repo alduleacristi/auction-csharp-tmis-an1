@@ -220,5 +220,16 @@ namespace DataMapper.EFDataMapper
                     .ToList();
              }
         }
+
+        public ICollection<Category> GetAllCategoryForAProduct(Product product)
+        {
+            using(var context = new AuctionModelContainer())
+            {
+                context.Products.Attach(product);
+                context.Entry(product).Collection(prod => prod.Categories).Load();
+
+                return product.Categories;
+            }
+        }
     }
 }
