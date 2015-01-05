@@ -12,7 +12,7 @@ namespace ServiceLayer
 {
     public class ProductService : IProductService
     {
-       private AuctionLogger logger;
+        private AuctionLogger logger;
         public ProductService()
         {
             logger = AuctionLogger.GetInstance();
@@ -39,7 +39,7 @@ namespace ServiceLayer
         }
         public ICollection<Product> GetProductsByNameAndDescription(String name, String description)
         {
-            return null;
+            return DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.GetProdctByNameAndDescription(name, description);
         }
         public Product GetProductById(int id)
         {
@@ -56,6 +56,17 @@ namespace ServiceLayer
         public void DeleteProduct(int id)
         {
 
+        }
+
+        public ICollection<Product> GetAllProductsOfACategory(Category category)
+        {
+            return DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.GetAllProductsOfACategory(category);
+        }
+
+
+        public Auction GetAuctionOfAProduct(Product product)
+        {
+            return DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.GetAuctionOfAProduct(product);
         }
     }
 }

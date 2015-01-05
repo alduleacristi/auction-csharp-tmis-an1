@@ -54,7 +54,7 @@ namespace ServiceLayer
                 DataMapperFactoryMethod.GetCurrentFactory().RoleFactory.UpdateRole(oldRoleName, newRoleName);
                 logger.logInfo("Role name was succesfully changed to " + newRoleName);
             }
-            catch (EntityNotFoundException entityNotFound)
+            catch (EntityDoesNotExistException entityNotFound)
             {
                 logger.logError(entityNotFound);
                 throw entityNotFound;
@@ -79,11 +79,16 @@ namespace ServiceLayer
                 DataMapperFactoryMethod.GetCurrentFactory().RoleFactory.DropRole(roleName);
                 logger.logInfo("The role with name " + roleName + " was dropped succesfully");
             }
-            catch (EntityNotFoundException entityNotFound)
+            catch (EntityDoesNotExistException entityNotFound)
             {
                 logger.logError(entityNotFound);
                 throw entityNotFound;
             }
+        }
+
+        public ICollection<Role> GetRolesFromAnUser(User user)
+        {
+            return DataMapperFactoryMethod.GetCurrentFactory().RoleFactory.GetAllRolesOfAnUser(user);
         }
     }
 }

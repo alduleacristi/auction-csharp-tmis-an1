@@ -131,5 +131,11 @@ namespace ServiceLayer
             logger.logInfo("Get parents hierarchy for category " + idCategory);
             return DataMapperFactoryMethod.GetCurrentFactory().CategoryFactory.getParents(idCategory);
         }
+
+        public ICollection<Category> GetCategorysForAProduct(Product product)
+        {
+            logger.logInfo("Get all category for product " + product.Name);
+            return DataMapperFactoryMethod.GetCurrentFactory().CategoryFactory.GetAllCategoryForAProduct(product);
+        }
     }
 }
