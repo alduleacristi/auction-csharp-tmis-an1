@@ -21,5 +21,17 @@ namespace DataMapper.EFDataMapper
                 return currencyVar;
             }
         }
+
+        public bool AddCurrency(String name)
+        {
+            Currency currency = new Currency();
+            currency.Name = name;
+            using (var context = new AuctionModelContainer())
+            {
+                context.Currencies.Add(currency);
+                context.SaveChanges();
+            }
+            return true;
+        }
     }
 }

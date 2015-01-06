@@ -152,7 +152,7 @@ namespace DataMapper.EFDataMapper
                     context.Entry(product).Collection(prod => prod.Auction.ProductActions).Load();
                 if (product.Auction != null)
                 {
-                    if (product.Auction.ProductActions.Count() > 0)
+                   // if (product.Auction.ProductActions.Count() > 0)
                     {
                         throw new DependencyException("The product has auctions. It cannot be deleted!");
                     }
@@ -184,9 +184,11 @@ namespace DataMapper.EFDataMapper
                                   where productSel.IdProduct == product.IdProduct
                                   select auction).FirstOrDefault();
 
-
-                 context.Auctions.Attach(auctionVar);
-                 context.Entry(auctionVar).Reference(auc => auc.User).Load();
+                if (auctionVar != null)
+                {
+                    context.Auctions.Attach(auctionVar);
+                    context.Entry(auctionVar).Reference(auc => auc.User).Load();
+                }
 
                 return auctionVar;
             }
