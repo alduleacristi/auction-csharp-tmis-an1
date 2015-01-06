@@ -742,6 +742,16 @@ namespace AuctionTests
         }
 
         [TestMethod]
+        public void GetCategorysForAProduct()
+        {
+            ProductService productService = new ProductService();
+            Product product = productService.GetProductById(1);
+            CategoryService categoryService = new CategoryService();
+            ICollection<Category> categs = categoryService.GetCategorysForAProduct(product);
+            Assert.AreEqual(categs.Count(), 1);
+        }
+
+        [TestMethod]
         public void TestCategChildrenCategory()
         {
             int id = 1;
