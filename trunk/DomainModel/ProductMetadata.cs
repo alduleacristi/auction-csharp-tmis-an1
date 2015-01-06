@@ -19,7 +19,7 @@ namespace DomainModel
             set;
         }
 
-        [StringLengthValidator(0, RangeBoundaryType.Inclusive, 300, RangeBoundaryType.Inclusive, ErrorMessage = "The product's description should have between {0} and {300} characters")]
+        [StringLengthValidator(0, RangeBoundaryType.Inclusive, 200, RangeBoundaryType.Inclusive, ErrorMessage = "The product's description should have between {0} and {200} characters")]
         public String Description
         {
             get;
