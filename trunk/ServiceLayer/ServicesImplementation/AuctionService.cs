@@ -94,7 +94,7 @@ namespace ServiceLayer
             if(nrOfAuctions > configuration.GetValue(Constants.MAX_NR_OF_AUCTION_ASSOCIATE_WITH_CATEGORY))
                 throw new AuctionException("The auction can not be added because the number of auctions per category was exceeded");
         }
-public void AddNewAuction(User user,Product product,Currency currency,double startPrice,DateTime startDate,DateTime endDate)
+        public void AddNewAuction(User user,Product product,Currency currency,double startPrice,DateTime startDate,DateTime endDate)
         {
             try 
             {
