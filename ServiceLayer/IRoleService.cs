@@ -9,10 +9,10 @@ namespace ServiceLayer
 {
     public interface IRoleService
     {
-        void AddRole(Role role);
+        bool AddRole(Role role);
         Role GetRoleByName(String name);
-        void UpdateRole(String oldRoleName,String newRoleName);
-        void DropRole(String roleName);
+        bool UpdateRole(String oldRoleName,String newRoleName);
+        bool DropRole(String roleName);
         ICollection<Role> GetRolesFromAnUser(User user);
     }
 }
