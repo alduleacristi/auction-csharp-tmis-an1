@@ -114,11 +114,6 @@ namespace ServiceLayer
                             logger.logError(duplicateException);
                             throw duplicateException;
                         }
-                        catch (EntityDoesNotExistException entityDoesNotExist)
-                        {
-                            logger.logError(entityDoesNotExist);
-                            throw entityDoesNotExist;
-                        }
                     }
                     else
                     {
@@ -138,26 +133,55 @@ namespace ServiceLayer
             logger.logInfo("Product successfully updated");
             return true;
         }
-        public void UpdateProductDescription(int id, String description)
+        public bool UpdateProductDescription(int id, String description)
         {
             logger.logInfo("Try to update product whit the id " + id);
-            try
+            Product product = this.GetProductById(id);
+            if (product == null)
             {
-                DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.UpdateProductDescription(id, description);
+                EntityDoesNotExistException e = new EntityDoesNotExistException("Product is null");
+                logger.logError(e);
+                throw e;
             }
-            catch (ValidationException validationException)
+            if (product.Description != description)
             {
-                logger.logError(validationException);
-                throw validationException;
+                String oldDesc = product.Description;
+                product.Description = description;
+                var validationResults = Validation.Validate<Product>(product);
+                if (description != null)
+                {
+                    if (validationResults.IsValid)
+                    {
+                        product.Description = oldDesc;
+                        try
+                        {
+                            DataMapperFactoryMethod.GetCurrentFactory().ProductFactory.UpdateProductDescription(product, description);
+                        }
+                        catch (DuplicateException duplicateException)
+                        {
+                            logger.logError(duplicateException);
+                            throw duplicateException;
+                        }
+                    }
+                    else
+                    {
+                        ValidationException e = new ValidationException("Invalid product's description.");
+                        logger.logError(e);
+                        throw e;
+                    }
+                }
+                else
+                {
+                    ValidationException e = new ValidationException("Invalid product's description.");
+                    logger.logError(e);
+                    throw e;
+                }
             }
-            catch (EntityDoesNotExistException entityDoesNotExist)
-            {
-                logger.logError(entityDoesNotExist);
-                throw entityDoesNotExist;
-            }
+            else logger.logInfo("Product has the same description");
             logger.logInfo("Product successfully updated");
+            return true;
         }
-        public void DeleteProduct(int id)
+        public bool DeleteProduct(int id)
         {
             logger.logInfo("Try to delete product whit the id " + id);
             try
@@ -175,6 +199,7 @@ namespace ServiceLayer
                 throw dependencyException;
             }
             logger.logInfo("Product successfully deleted!");
+            return true;
         }
 
         public ICollection<Product> GetAllProductsOfACategory(Category category)

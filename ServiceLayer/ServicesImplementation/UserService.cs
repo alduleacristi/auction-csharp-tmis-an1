@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.ServicesImplementation
+namespace ServiceLayer
 {
     public class UserService:IUserService
     {

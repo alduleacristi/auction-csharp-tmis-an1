@@ -108,11 +108,6 @@ namespace ServiceLayer
                             logger.logError(duplicateException);
                             throw duplicateException;
                         }
-                        catch (EntityDoesNotExistException entityDoesNotExist)
-                        {
-                            logger.logError(entityDoesNotExist);
-                            throw entityDoesNotExist;
-                        }
                     }
                     else
                     {
@@ -153,15 +148,7 @@ namespace ServiceLayer
                  category.Description = oldDescription;
                  if (category.Description != description)
                  {
-                     try
-                     {
-                         DataMapperFactoryMethod.GetCurrentFactory().CategoryFactory.UpdateCategoryDescription(category, description);
-                     }
-                     catch (EntityDoesNotExistException entityDoesNotExist)
-                     {
-                         logger.logError(entityDoesNotExist);
-                         throw entityDoesNotExist;
-                     }
+                     DataMapperFactoryMethod.GetCurrentFactory().CategoryFactory.UpdateCategoryDescription(category, description);
                      logger.logInfo("Category successfully updated");
                  }
              }
