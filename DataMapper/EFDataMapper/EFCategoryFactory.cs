@@ -45,17 +45,8 @@ namespace DataMapper.EFDataMapper
                 }
             
                  context.Categories.Add(category);
-                 try
-                 {
-                     context.SaveChanges();
-                 }
-                 catch (System.Data.Entity.Validation.DbEntityValidationException ex)
-                 {
-                     IEnumerable<DbEntityValidationResult> errors = ex.EntityValidationErrors;
-                     foreach (DbEntityValidationResult error in errors)
-                         foreach (var validationError in error.ValidationErrors)
-                             Console.WriteLine(validationError.PropertyName + ". " + validationError.ErrorMessage);
-                 }
+                 context.SaveChanges();
+                 
                 }
             }
 
@@ -133,11 +124,8 @@ namespace DataMapper.EFDataMapper
                 if (category.IdParentCategory != null)
                     category.ParentCategory = this.GetCategoryById((int)category.IdParentCategory);
                 if (category.ParentCategory != null)
-                {
                     if (this.exists(category.ParentCategory.IdCategory, newName))
                         throw new DuplicateException("You can not add two categories with the same name (" + newName + ").");
-                }
-                else
                 {
                     if (this.verifyNameInRoots(newName))
                         throw new DuplicateException("You can not add two categories with the same name (" + newName + ").");

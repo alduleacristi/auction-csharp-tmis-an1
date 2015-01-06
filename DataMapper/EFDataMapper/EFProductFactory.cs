@@ -81,14 +81,9 @@ namespace DataMapper.EFDataMapper
         }
         public void UpdateProduct(Product product, String newName)
         {
-            if (product == null)
-            {
-                throw new EntityDoesNotExistException("Product does not exists!");
-            }
-            if (!product.Name.Equals(newName))
-            {
                 using (var context = new AuctionModelContainer())
                 {
+                    Console.WriteLine("Verify duplication");
                     ICollection<Product> products = this.GetProdctByNameAndDescription(newName, product.Description);
                     foreach (Category category in product.Categories)
                     {
@@ -99,78 +94,62 @@ namespace DataMapper.EFDataMapper
                             context.Entry(productAux).Collection(pAux => pAux.Categories).Load();
                             foreach (Category pcateg in productAux.Categories)
                             {
+                                Console.WriteLine(category.Name + " " + pcateg.Name);
                                 if (category.Name.Equals(pcateg.Name))
+                                {
+                                    Console.WriteLine("Duplication exception");
                                     throw new DuplicateException("The same product already exists - same name, description and category");
+                                }
                             }
                         }
                     }
-
+                    product.Name = newName;
                     context.Products.Attach(product);
                     var entry = context.Entry(product);
                     entry.Property(r => r.Name).IsModified = true;
                     context.SaveChanges();
                 }
-            }
         }
-        public void UpdateProductDescription(int id, String description)
+        public void UpdateProductDescription(Product product, String description)
         {
-            Product product = this.GetProdctById(id);
-            if (product == null)
-            {
-                throw new EntityDoesNotExistException("Product does not exists!");
-            }
-            if (!product.Description.Equals(description))
-            {
                 using (var context = new AuctionModelContainer())
                 {
                     ICollection<Product> products = this.GetProdctByNameAndDescription(product.Name, description);
-                    //Console.WriteLine(products.Count());
                     foreach (Category category in product.Categories)
                     {
-                        //Console.WriteLine("Category in product.Categories " + category.IdCategory);
                         foreach (Product p in products)
                         {
                             Product productAux = this.GetProdctById(p.IdProduct);
                             context.Products.Attach(productAux);
                             context.Entry(productAux).Collection(pAux => pAux.Categories).Load();
-                            //Console.WriteLine("P in Products " + productAux.IdProduct + " " + productAux.Categories.Count());
                             foreach (Category pcateg in productAux.Categories)
                             {
-                                //Console.WriteLine(category.Name);
-                                //Console.WriteLine(pcateg.Name);
                                 if (category.Name.Equals(pcateg.Name))
                                     throw new DuplicateException("The same product already exists - same name, description and category");
                             }
                         }
                     }
 
+                    product.Description = description;
                     context.Products.Attach(product);
                     var entry = context.Entry(product);
-                    entry.Property(r => r.Name).IsModified = true;
-
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (DbEntityValidationException exc)
-                    {
-                        throw new ValidationException("Invalid product's description.");
-                    }
+                    entry.Property(r => r.Description).IsModified = true;
+                    context.SaveChanges();
                 }
-            }
         }
         public void DeleteProduct(int id)
         {
             Product product = this.GetProdctById(id);
             if (product == null)
             {
-                throw new EntityDoesNotExistException("Category does not exists!");
+                throw new EntityDoesNotExistException("Product does not exists!");
             }
 
             using (var context = new AuctionModelContainer())
             {
                 context.Products.Attach(product);
-                context.Entry(product).Collection(prod => prod.Auction.ProductActions).Load();
+                if(product.Auction!=null)
+                    context.Entry(product).Collection(prod => prod.Auction.ProductActions).Load();
                 if (product.Auction != null)
                 {
                     if (product.Auction.ProductActions.Count() > 0)
