@@ -13,8 +13,8 @@ namespace ServiceLayer
         ICollection<Product> GetProductsByNameAndDescription(String name, String description);
         Product GetProductById(int id);
         bool UpdateProduct(int id, String newName);
-        void UpdateProductDescription(int id, String description);
-        void DeleteProduct(int id);
+        bool UpdateProductDescription(int id, String description);
+        bool DeleteProduct(int id);
         ICollection<Product> GetAllProductsOfACategory(Category category);
         Auction GetAuctionOfAProduct(Product product);
     }
