@@ -664,29 +664,6 @@ namespace AuctionTests
             Assert.AreEqual(result, true);
         }
 
-        [TestMethod]
-        public void DeleteDependencyProduct()
-        {
-            int id = 7;
-            CategoryService categoryService = new CategoryService();
-            AuctionService auctionService = new AuctionService();
-            ProductService productService = new ProductService();
-            Category category = categoryService.GetCategoryById(id);
-            Product product = new Product();
-            product.Name = "Product";
-            product.Description = "Description";
-            product.Categories.Add(category);
-            productService.AddProduct(product);
-            Boolean result = false;
-            try
-            {
-                result = categoryService.DeleteCategory(id);
-            }
-            catch (DependencyException exc)
-            {
-                Assert.AreEqual("The category has products. It cannot be deleted!", exc.Message);
-            }
-            Assert.AreEqual(result, false);
-        }
+       
     }
 }
