@@ -10,5 +10,7 @@ namespace DataMapper
     public interface ICurrencyFactory
     {
         Currency getCurrencyById(int id);
+
+        bool AddCurrency(String name);
     }
 }
