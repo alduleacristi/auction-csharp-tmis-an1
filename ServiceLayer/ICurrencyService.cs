@@ -10,5 +10,6 @@ namespace ServiceLayer
     public interface ICurrencyService
     {
         Currency getCurrencyById(int id);
+        bool AddCurrency(String name);
     }
 }
