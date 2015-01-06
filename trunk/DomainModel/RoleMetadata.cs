@@ -21,13 +21,7 @@ namespace DomainModel
 
         internal static void Validate(Role role, ValidationResults results)
         {
-            if (true)//some business-logic derived condition
-            {
-                results.AddResult
-                    (
-                        new ValidationResult("some reason from SelfValidation method", role, "ValidateMethod", "error", null)
-                    );
-            }
+           
         }
     }
 }
