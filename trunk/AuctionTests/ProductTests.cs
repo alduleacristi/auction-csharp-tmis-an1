@@ -663,7 +663,88 @@ namespace AuctionTests
             result = productService.DeleteProduct(id);
             Assert.AreEqual(result, true);
         }
+/*
+        [TestMethod]
+        public void deleteExistentProductDependency()
+        {
+            int id = 9;
+            ProductService productService = new ProductService();
+            CategoryService categoryService = new CategoryService();
+            Product p = new Product();
+            p.Name = "Prod";
+            p.Description = "Desc";
+            p.Categories.Add(categoryService.GetCategoryById(1));
+            p.Auction = new Auction();
+            Boolean result = false;
+            productService.AddProduct(p);
+            try
+            {
+                result = productService.DeleteProduct(id);
+            }
+            catch (DependencyException e)
+            {
+                Assert.AreEqual("The product has auctions. It cannot be deleted!", e.Message);
+            }
+            Assert.AreEqual(result, false);
+        }*/
 
-       
+        [TestMethod]
+        public void GetAllProductsOfACategory()
+        {
+            CategoryService categoryService = new CategoryService();
+            ProductService productService = new ProductService();
+            Category category = categoryService.GetCategoryById(7);
+            ICollection<Product> products = productService.GetAllProductsOfACategory(category);
+            Assert.AreEqual(products.Count(), 2);
+        }
+
+        [TestMethod]
+        public void GetAuctionOfAProduct()
+        {
+            ProductService productService = new ProductService();
+            Product product = productService.GetProductById(1);
+            Auction auction = productService.GetAuctionOfAProduct(product);
+            Assert.IsNull(auction);
+        }
+
+        [TestMethod]
+        public void GetExistentProductById()
+        {
+            ProductService productService = new ProductService();
+            Product product = productService.GetProductById(1);
+            Assert.AreEqual(product.Description, "Description");
+        }
+
+        [TestMethod]
+        public void GetInExistentProductById()
+        {
+            ProductService productService = new ProductService();
+            Product product = productService.GetProductById(100);
+            Assert.IsNull(product);
+        }
+
+        [TestMethod]
+        public void GetProductByNameAndDescription()
+        {
+            ProductService productService = new ProductService();
+            ICollection<Product> products = productService.GetProductsByNameAndDescription("Product","");
+            Assert.AreEqual(products.Count(), 1);
+        }
+
+        [TestMethod]
+        public void GetProductByNameAndDescriptionZero()
+        {
+            ProductService productService = new ProductService();
+            ICollection<Product> products = productService.GetProductsByNameAndDescription("", "");
+            Assert.AreEqual(products.Count(), 0);
+        }
+
+        [TestMethod]
+        public void GetProductByNameAndDescriptionNull()
+        {
+            ProductService productService = new ProductService();
+            ICollection<Product> products = productService.GetProductsByNameAndDescription(null, null);
+            Assert.AreEqual(products.Count(), 0);
+        }
     }
 }
