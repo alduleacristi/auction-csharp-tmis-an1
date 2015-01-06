@@ -16,48 +16,189 @@ namespace AuctionTests
     [TestClass]
     public class RoleTests
     {
-        MockRepository mockRepo = null;
+        private IRoleService roleService;
+        private IUserService userService;
 
         public RoleTests()
         {
-            mockRepo = new MockRepository();
+            roleService = new RoleService();
+            userService = new UserService();
         }
 
-       /* [TestMethod]
-        public void TestAddRole()
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void TestAddRoleNull()
         {
-            RoleService roleService = new RoleService();
-            roleService.AddRole(new Role() { Name="Admin"});
+            roleService.AddRole(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void TestAddRoleWith1Character()
+        {
+            roleService.AddRole(new Role { Name = "A" });
+        }
+
+        [TestMethod]
+        public void TestAddRoleWith3Character()
+        {
+            bool ok = roleService.AddRole(new Role { Name = "AAA" });
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        public void TestAddRoleWith30Character()
+        {
+            bool ok = roleService.AddRole(new Role { Name = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" });
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void TestAddRoleWith31Character()
+        {
+            bool ok = roleService.AddRole(new Role { Name = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" });
+        }
+
+        [TestMethod]
+        public void TestAddValidRole()
+        {
+            bool ok = roleService.AddRole(new Role { Name = "AAAA" });
+
+            Assert.IsTrue(ok);
         }
 
         [TestMethod]
         [ExpectedException(typeof(DuplicateException))]
-        public void TestGetRoleByNameWithException()
+        public void TestAddDuplicateRole()
         {
-            RoleService roleService = new RoleService();
-            roleService.AddRole(new Role { Name = "Admin" });
-            Role role = roleService.GetRoleByName("admin");
-
-            Assert.IsNotNull(role);
+            roleService.AddRole(new Role { Name = "AAAA" });
         }
 
         [TestMethod]
-        public void TestGetRoleByName()
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void TestUpdateRoleWhichDoesNotExist()
         {
-            RoleService roleService = new RoleService();
-            roleService.AddRole(new Role { Name = "User" });
-            Role role = roleService.GetRoleByName("admin");
-
-            Assert.IsNotNull(role);
-        }*/
+            roleService.UpdateRole("U", "X");
+        }
 
         [TestMethod]
-        public void TestRoleValidation()
+        [ExpectedException(typeof(ValidationException))]
+        public void TestUpdateRoleToANameWith1Character()
         {
-            Role role = new Role() { Name = "ABCDE"};
+            roleService.UpdateRole("AAA", "B");
+        }
+
+        [TestMethod]
+        public void TestUpdateRoleToANameWith3Character()
+        {
+            bool ok = roleService.UpdateRole("AAA", "BBB");
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        public void TestUpdateRoleToANameWith30Character()
+        {
+            bool ok = roleService.UpdateRole("BBB", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void TestUpdateRoleToANameWith31Character()
+        {
+            bool ok = roleService.UpdateRole("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        }
+
+        [TestMethod]
+        public void TestUpdateToAValidRole()
+        {
+            bool ok = roleService.UpdateRole("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "CCCC");
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DuplicateException))]
+        public void TestUpdateToADuplicateRole()
+        {
+            bool ok = roleService.UpdateRole("CCCC", "AAAA");
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        public void TestGetARoleThatExist()
+        {
+            bool ok = roleService.AddRole(new Role(){Name = "DDDD"});
+            Role role = roleService.GetRoleByName("DDDD");
+
+            Assert.IsNotNull(role);
+            Assert.AreEqual("DDDD", role.Name);
+        }
+
+        [TestMethod]
+        public void TestGetARoleThatDoesNotExist()
+        {
+            Role role = roleService.GetRoleByName("U");
+
+            Assert.IsNull(role);
+        }
+
+        [TestMethod]
+        public void TestDropRole()
+        {
+            bool ok = roleService.AddRole(new Role() { Name = "EEEE" });
+            ok = roleService.DropRole("EEEE");
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void TestDropRoleWhichDoesNotExist()
+        {
+            bool ok = roleService.DropRole("X");
+
+            Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        public void TestGetRolesFromAnUser()
+        {
+            User user = new User();
+            user.FirstName = "AAA";
+            user.LastName = "BBB";
+            user.Email = "aaa@bbb.com";
+
+            userService.AddUser(user);
+
+            ICollection<Role> roles = roleService.GetRolesFromAnUser(userService.GetUserByEmail("aaa@bbb.com"));
+            Assert.AreEqual(0, roles.Count);
+        }
+
+        [TestMethod]
+        public void TestGetRolesFromAnUserWithRoles()
+        {
+            User user = new User();
+            user.FirstName = "AAA";
+            user.LastName = "BBB";
+            user.Email = "dddd@eeee.com";
+
+            userService.AddUser(user);
+
+            Role role = new Role();
+            role.Name = "ffff";
+            roleService.AddRole(role);
             
-            var validationResults = Validation.Validate<Role>(role);
-            //Assert.IsTrue(validationResults.IsValid);
+            userService.AddRoleToUser("dddd@eeee.com", role);
+
+            ICollection<Role> roles = roleService.GetRolesFromAnUser(userService.GetUserByEmail("dddd@eeee.com"));
+            Assert.AreEqual(1, roles.Count);
         }
     }
 }
