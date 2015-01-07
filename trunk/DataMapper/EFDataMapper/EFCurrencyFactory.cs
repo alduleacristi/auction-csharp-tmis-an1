@@ -33,5 +33,16 @@ namespace DataMapper.EFDataMapper
             }
             return true;
         }
+
+        public Currency GetCurrencyByName(String name)
+        {
+            using (var context = new AuctionModelContainer())
+            {
+                var currencyVar = (from currency in context.Currencies
+                                   where currency.Name == name
+                                   select currency).FirstOrDefault();
+                return currencyVar;
+            }
+        }
     }
 }
