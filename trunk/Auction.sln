@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionConsole", "AuctionCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{B4BAAB68-E0C6-471A-B3BB-FE5352457E57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{00FEEC1C-F4D3-41A0-AAC5-593B0F007853}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{B4BAAB68-E0C6-471A-B3BB-FE5352457E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4BAAB68-E0C6-471A-B3BB-FE5352457E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4BAAB68-E0C6-471A-B3BB-FE5352457E57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00FEEC1C-F4D3-41A0-AAC5-593B0F007853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00FEEC1C-F4D3-41A0-AAC5-593B0F007853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00FEEC1C-F4D3-41A0-AAC5-593B0F007853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00FEEC1C-F4D3-41A0-AAC5-593B0F007853}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{95BB0945-D541-4B28-9866-F6C9243FFF71} = {A3194EE4-8AB3-48EF-84F5-24A42E56801A}
 		{72AFACB4-D441-4CB4-AC33-778E315A31BD} = {7E5059BD-6774-4D88-9C30-A55F39D1F0DC}
 		{B4BAAB68-E0C6-471A-B3BB-FE5352457E57} = {A3194EE4-8AB3-48EF-84F5-24A42E56801A}
+		{00FEEC1C-F4D3-41A0-AAC5-593B0F007853} = {A3194EE4-8AB3-48EF-84F5-24A42E56801A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
