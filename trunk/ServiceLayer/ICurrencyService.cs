@@ -11,5 +11,6 @@ namespace ServiceLayer
     {
         Currency getCurrencyById(int id);
         bool AddCurrency(String name);
+        Currency GetCurrencyByName(String name);
     }
 }
