@@ -24,7 +24,7 @@ namespace ServiceLayer
             return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetUserByEmail(email);
         }
 
-        public void AddUser(User user)
+        public bool AddUser(User user)
         {
             logger.logInfo("Try to add a new user.");
 
@@ -32,6 +32,8 @@ namespace ServiceLayer
             { 
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddUser(user);
                 logger.logInfo("The user with name " + user.FirstName +" "+user.LastName+ " was succesfully added.");
+
+                return true;
             }
             catch (ValidationException validationException)
             {
@@ -45,7 +47,7 @@ namespace ServiceLayer
             }
         }
 
-        public void UpdateFirstName(String email,String newFirstName)
+        public bool UpdateFirstName(String email,String newFirstName)
         {
             logger.logInfo("Try to update the first name of the user with email " + email);
 
@@ -53,6 +55,8 @@ namespace ServiceLayer
             {
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateFirstName(email, newFirstName);
                 logger.logInfo("First name was succesfully changed to " + newFirstName);
+
+                return true;
             }
             catch (EntityDoesNotExistException entityNotFound)
             {
@@ -66,7 +70,7 @@ namespace ServiceLayer
             }
         }
 
-        public void UpdateLastName(String email,String newLastName)
+        public bool UpdateLastName(String email,String newLastName)
         {
             logger.logInfo("Try to update the last name of the user with email " + email);
 
@@ -74,6 +78,8 @@ namespace ServiceLayer
             {
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateLastName(email, newLastName);
                 logger.logInfo("Last name was succesfully changed to " + newLastName);
+
+                return true;
             }
             catch (EntityDoesNotExistException entityNotFound)
             {
@@ -87,7 +93,7 @@ namespace ServiceLayer
             }
         }
 
-        public void UpdateEmail(String oldEmail,String newEmail)
+        public bool UpdateEmail(String oldEmail,String newEmail)
         {
             logger.logInfo("Try to update the user email " + oldEmail);
 
@@ -95,6 +101,8 @@ namespace ServiceLayer
             {
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateEmail(oldEmail, newEmail);
                 logger.logInfo("Email was succesfully changed to " + newEmail);
+
+                return true;
             }
             catch (EntityDoesNotExistException entityNotFound)
             {
@@ -113,7 +121,7 @@ namespace ServiceLayer
             }
         }
 
-        public void DropUser(String email)
+        public bool DropUser(String email)
         {
             logger.logInfo("Try to drop user with email " + email);
 
@@ -121,6 +129,8 @@ namespace ServiceLayer
             {
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.DropUser(email);
                 logger.logInfo("TUser with email " + email+" was succesfully removed");
+
+                return true;
             }
             catch (EntityDoesNotExistException entityNotFound)
             {
@@ -134,14 +144,16 @@ namespace ServiceLayer
             }
         }
 
-        public void AddRoleToUser(String email,Role role)
+        public bool AddRoleToUser(String email,Role role)
         {
             logger.logInfo("Try to add role " +role.Name+" to user with email " + email);
             DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddRoleToUser(email,role);
             logger.logInfo("Role " + role.Name + " was succesfully assigned to user with email " + email);
+
+            return true;
         }
 
-        public void RemoveRoleFromUser(String email,Role role)
+        public bool RemoveRoleFromUser(String email,Role role)
         {
             logger.logInfo("Try to remove role" + role.Name + " from user with email " + email);
 
@@ -149,6 +161,8 @@ namespace ServiceLayer
             { 
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.RemoveRoleFromUser(email, role);
                 logger.logInfo("Role" + role.Name + " was succesfully removed from user with email " + email);
+
+                return true;
             }
             catch(EntityDoesNotExistException exc)
             {
@@ -191,7 +205,7 @@ namespace ServiceLayer
             return false;
         }
 
-        public void AddNoteToUser(User givingNoteUser, User receivingNoteUser, int note)
+        public bool AddNoteToUser(User givingNoteUser, User receivingNoteUser, int note)
         {
             try 
             {
@@ -216,6 +230,8 @@ namespace ServiceLayer
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddRating(persistRating);
 
                 logger.logInfo("User " + givingNoteUser.Email + " succesfully add note " + note + " to user with email " + receivingNoteUser);
+
+                return true;
             }
             catch (EntityDoesNotExistException exc)
             {
@@ -234,7 +250,7 @@ namespace ServiceLayer
             }
         }
 
-        public void UpdateRating(User givingRating,User receivingRating, int note)
+        public bool UpdateRating(User givingRating,User receivingRating, int note)
         {
             try
             { 
@@ -258,6 +274,8 @@ namespace ServiceLayer
                 oldRating.Grade = note;
 
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateRating(oldRating);
+
+                return true;
            }
            catch (EntityDoesNotExistException exc)
            {

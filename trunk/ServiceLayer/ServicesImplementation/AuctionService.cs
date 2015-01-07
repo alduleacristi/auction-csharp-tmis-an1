@@ -85,7 +85,7 @@ namespace ServiceLayer
                     foreach(Product productCat in products)
                     {
                         Auction auction = productService.GetAuctionOfAProduct(productCat);
-                        if (auction.User.Equals(user))
+                        if (auction != null && auction.User.Equals(user))
                             nrOfAuctions++;
                     }
                 }
