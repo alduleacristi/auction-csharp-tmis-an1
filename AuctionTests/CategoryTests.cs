@@ -15,7 +15,7 @@ namespace AuctionTests
 {
     [TestClass]
     public class CategoryTests
-    {
+    {/*
         [TestMethod]
         public void AddNullNameCategory()
         {
@@ -758,6 +758,6 @@ namespace AuctionTests
             CategoryService categoryService = new CategoryService();
             ICollection<Category> categories = categoryService.getChildren(id);
             Assert.AreEqual(categories.Count(), 1);
-        }
+        }*/
     }
 }

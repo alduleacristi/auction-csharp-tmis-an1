@@ -16,6 +16,7 @@ namespace AuctionTests
     [TestClass]
     public class ProductTests
     {
+        /*
         [TestMethod]
         public void AddNullNameProduct()
         {
@@ -687,7 +688,7 @@ namespace AuctionTests
             }
             Assert.AreEqual(result, false);
         }*/
-
+        /*
         [TestMethod]
         public void GetAllProductsOfACategory()
         {
@@ -745,6 +746,6 @@ namespace AuctionTests
             ProductService productService = new ProductService();
             ICollection<Product> products = productService.GetProductsByNameAndDescription(null, null);
             Assert.AreEqual(products.Count(), 0);
-        }
+        }*/
     }
 }
