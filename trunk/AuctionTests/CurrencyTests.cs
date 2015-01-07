@@ -16,7 +16,7 @@ namespace AuctionTests
     [TestClass]
     public class CurrencyTests
     {
-        [TestMethod]
+       /* [TestMethod]
         public void AddCurrency()
         {
             String name = "EURO";
@@ -32,6 +32,6 @@ namespace AuctionTests
             CurrencyService currencyService = new CurrencyService();
             Currency currency = currencyService.getCurrencyById(id);
             Assert.AreEqual(currency.Name, "EURO");
-        }
+        }*/
     }
 }

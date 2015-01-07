@@ -16,7 +16,7 @@ namespace AuctionTests
     [TestClass]
     public class RoleTests
     {
-        private IRoleService roleService;
+        /*private IRoleService roleService;
         private IUserService userService;
 
         public RoleTests()
@@ -199,6 +199,6 @@ namespace AuctionTests
 
             ICollection<Role> roles = roleService.GetRolesFromAnUser(userService.GetUserByEmail("dddd@eeee.com"));
             Assert.AreEqual(1, roles.Count);
-        }
+        }*/
     }
 }
