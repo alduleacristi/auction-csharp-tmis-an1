@@ -28,5 +28,12 @@ namespace ServiceLayer
             logger.logInfo("Try to add a new currency "+name);
             return DataMapperFactoryMethod.GetCurrentFactory().CurrencyFactory.AddCurrency(name);
         }
+
+        public Currency GetCurrencyByName(String name)
+        {
+            logger.logInfo("Try to get currency by name " + name);
+
+            return DataMapperFactoryMethod.GetCurrentFactory().CurrencyFactory.GetCurrencyByName(name);
+        }
     }
 }
