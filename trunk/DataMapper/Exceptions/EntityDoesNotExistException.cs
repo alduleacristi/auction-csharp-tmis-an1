@@ -8,16 +8,8 @@ namespace DataMapper.Exceptions
 {
     public class EntityDoesNotExistException : AuctionException
     {
-        public EntityDoesNotExistException():base()
-        {
-        }
 
         public EntityDoesNotExistException(String message):base(message)
-        {
-        }
-
-        public EntityDoesNotExistException(String message, Exception inner)
-            : base(message, inner)
         {
         }
     }

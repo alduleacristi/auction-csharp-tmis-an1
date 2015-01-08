@@ -8,17 +8,10 @@ namespace DataMapper.Exceptions
 {
     public class DuplicateException:AuctionException
     {
-        public DuplicateException():base()
-        {
-        }
 
         public DuplicateException(String message):base(message)
         {
         }
 
-        public DuplicateException(String message, Exception inner)
-            : base(message, inner)
-        {
-        }
     }
 }
