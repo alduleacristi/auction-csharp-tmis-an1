@@ -190,7 +190,7 @@ namespace UnitTestProject
             userService.AddUser(user);
 
             Role role = new Role();
-            role.Name = "ffff";
+            role.Name = "actioneer";
             roleService.AddRole(role);
 
             userService.AddRoleToUser("dddd@eeee.com", role);

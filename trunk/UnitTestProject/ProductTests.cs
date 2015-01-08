@@ -57,7 +57,7 @@ namespace UnitTestProject
             product.Name = "thr";
             product.Description = "";
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             Boolean result = false;
@@ -79,7 +79,7 @@ namespace UnitTestProject
             product.Name = "123456789012345678901234567890";
             product.Description = "";
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             Boolean result = false;
@@ -140,7 +140,7 @@ namespace UnitTestProject
             product.Description = "";
 
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             Boolean result = false;
@@ -163,7 +163,7 @@ namespace UnitTestProject
             product.Description = "abcdefghijabcdefghijabcdefghij";
 
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             Boolean result = false;
@@ -186,7 +186,7 @@ namespace UnitTestProject
             product.Description = "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij";
 
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             Boolean result = false;
@@ -290,7 +290,7 @@ namespace UnitTestProject
             product.Name = "thr";
             product.Description = "";
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             Boolean result = false;
@@ -309,7 +309,7 @@ namespace UnitTestProject
         public void UpdateProductNameNull()
         {
             String name = null;
-            int id = 1;
+            int id = 2;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -327,7 +327,7 @@ namespace UnitTestProject
         public void UpdateProductOneCharacterName()
         {
             String name = "o";
-            int id = 1;
+            int id = 2;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -345,7 +345,7 @@ namespace UnitTestProject
         public void UpdateProductThreeCharactersName()
         {
             String name = "pro";
-            int id = 1;
+            int id = 2;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -363,7 +363,7 @@ namespace UnitTestProject
         public void UpdateProductThirtyCharactersName()
         {
             String name = "123456789012345678901234567890";
-            int id = 1;
+            int id = 2;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -381,7 +381,7 @@ namespace UnitTestProject
         public void UpdateProductThirtyOneCharactersName()
         {
             String name = "1234567890123456789012345678901";
-            int id = 1;
+            int id = 2;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -402,14 +402,14 @@ namespace UnitTestProject
             product.Name = "Product1";
             product.Description = "Description";
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(7);
+            Category category = categoryService.GetCategoryById(8);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             productService.AddProduct(product);
 
             String name = "123456789012345678901234567890";
-            int id = 7;
-
+            int id = 8;
+            Product p = productService.GetProductById(id);
             Boolean result = false;
             try
             {
@@ -445,7 +445,7 @@ namespace UnitTestProject
         public void UpdateProductSameName()
         {
             String name = "product";
-            int id = 5;
+            int id = 6;
             ProductService productService = new ProductService();
 
             Boolean result = false;
@@ -484,7 +484,7 @@ namespace UnitTestProject
         public void UpdateProductDescriptionZeroCharacters()
         {
             String description = "";
-            int id = 7;
+            int id = 8;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -502,7 +502,7 @@ namespace UnitTestProject
         public void UpdateProductDescriptionThirtyCharacters()
         {
             String description = "123456789012345678901234567890";
-            int id = 7;
+            int id = 8;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -520,7 +520,7 @@ namespace UnitTestProject
         public void UpdateProductDescriptionTwoHundredCharacters()
         {
             String description = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
-            int id = 7;
+            int id = 8;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -538,7 +538,7 @@ namespace UnitTestProject
         public void UpdateProductDescriptionTwoHundredAndOneCharacters()
         {
             String description = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901";
-            int id = 7;
+            int id = 8;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -575,7 +575,7 @@ namespace UnitTestProject
         public void UpdateProductSameDescription()
         {
             String description = "abcdefghijabcdefghijabcdefghij";
-            int id = 5;
+            int id = 6;
             ProductService productService = new ProductService();
 
             Boolean result = false;
@@ -615,13 +615,13 @@ namespace UnitTestProject
             product.Name = "product";
             product.Description = "Description";
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             product.Categories.Add(category);
             ProductService productService = new ProductService();
             productService.AddProduct(product);
 
             String desc = "abcdefghijabcdefghijabcdefghij";
-            int id = 8;
+            int id = 9;
 
             Boolean result = false;
             try
@@ -671,7 +671,7 @@ namespace UnitTestProject
                     Product p = new Product();
                     p.Name = "Prod";
                     p.Description = "Desc";
-                    p.Categories.Add(categoryService.GetCategoryById(1));
+                    p.Categories.Add(categoryService.GetCategoryById(2));
                     p.Auction = new Auction();
                     Boolean result = false;
                     productService.AddProduct(p);
@@ -691,16 +691,16 @@ namespace UnitTestProject
         {
             CategoryService categoryService = new CategoryService();
             ProductService productService = new ProductService();
-            Category category = categoryService.GetCategoryById(7);
+            Category category = categoryService.GetCategoryById(8);
             ICollection<Product> products = productService.GetAllProductsOfACategory(category);
-            Assert.AreEqual(products.Count(), 2);
+            Assert.AreEqual(products.Count(), 1);
         }
 
         [TestMethod]
         public void GetAuctionOfAProduct()
         {
             ProductService productService = new ProductService();
-            Product product = productService.GetProductById(1);
+            Product product = productService.GetProductById(2);
             Auction auction = productService.GetAuctionOfAProduct(product);
             Assert.IsNull(auction);
         }
@@ -709,7 +709,7 @@ namespace UnitTestProject
         public void GetProductExistentById()
         {
             ProductService productService = new ProductService();
-            Product product = productService.GetProductById(1);
+            Product product = productService.GetProductById(2);
             Assert.AreEqual(product.Description, "Description");
         }
 

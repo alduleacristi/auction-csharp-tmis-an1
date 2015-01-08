@@ -128,7 +128,7 @@ namespace UnitTestProject
         public void AddCategoryZeroCharactesDescription()
         {
             Category category = new Category();
-            category.Name = "category";
+            category.Name = "categ";
             category.Description = "";
 
             CategoryService categoryService = new CategoryService();
@@ -232,7 +232,7 @@ namespace UnitTestProject
             category.Name = "NotNullParentName";
             category.Description = "NotNullParentDescription";
             CategoryService categoryService = new CategoryService();
-            category.ParentCategory = categoryService.GetCategoryById(1);
+            category.ParentCategory = categoryService.GetCategoryById(2);
 
             Boolean result = false;
             try
@@ -295,7 +295,7 @@ namespace UnitTestProject
             category.Name = "NotNullParentName";
             category.Description = "NotNullParentDescription";
             CategoryService categoryService = new CategoryService();
-            category.ParentCategory = categoryService.GetCategoryById(1);
+            category.ParentCategory = categoryService.GetCategoryById(2);
             Boolean result = false;
             try
             {
@@ -330,7 +330,7 @@ namespace UnitTestProject
         {
             String name = "thr";
             CategoryService categoryService = new CategoryService();
-            Category category = categoryService.GetCategoryById(1);
+            Category category = categoryService.GetCategoryById(2);
             Assert.IsNotNull(category);
             Assert.AreEqual(category.Name, name);
         }
@@ -366,7 +366,7 @@ namespace UnitTestProject
         public void UpdateCategoryNameNull()
         {
             String name = null;
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -384,7 +384,7 @@ namespace UnitTestProject
         public void UpdateCategoryNameOneCharacter()
         {
             String name = "o";
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -402,7 +402,7 @@ namespace UnitTestProject
         public void UpdateCategoryNameThreeCharacters()
         {
             String name = "abc";
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -414,7 +414,7 @@ namespace UnitTestProject
                 Assert.AreEqual("", exc.Message);
             }
             Assert.AreEqual(result, true);
-            Category categ = categoryService.GetCategoryById(1);
+            Category categ = categoryService.GetCategoryById(2);
             Assert.AreEqual(categ.Name, name);
         }
 
@@ -422,7 +422,7 @@ namespace UnitTestProject
         public void UpdateCategoryNameThirtyCharacters()
         {
             String name = "abcdefghijabcdefghijabcdefghij";
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -434,7 +434,7 @@ namespace UnitTestProject
                 Assert.AreEqual("", exc.Message);
             }
             Assert.AreEqual(result, true);
-            Category categ = categoryService.GetCategoryById(1);
+            Category categ = categoryService.GetCategoryById(id);
             Assert.AreEqual(categ.Name, name);
         }
 
@@ -442,7 +442,7 @@ namespace UnitTestProject
         public void UpdateCategoryNameThirtyOneCharacters()
         {
             String name = "abcdefghijabcdefghijabcdefghija";
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -478,7 +478,7 @@ namespace UnitTestProject
         public void UpdateCategoryDuplicateRootName()
         {
             String name = "category";
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -496,9 +496,9 @@ namespace UnitTestProject
         public void UpdateCategoryDuplicateHName()
         {
             String name = "HCateg";
-            int id = 7;
+            int id = 8;
             CategoryService categoryService = new CategoryService();
-            Category parent = categoryService.GetCategoryById(1);
+            Category parent = categoryService.GetCategoryById(2);
             Category category = new Category() { Name = "HCateg", Description = "", ParentCategory = parent };
             categoryService.AddCategory(category);
             Boolean result = false;
@@ -516,8 +516,8 @@ namespace UnitTestProject
         [TestMethod]
         public void UpdateCategorySameName()
         {
-            String name = "category";
-            int id = 3;
+            String name = "categ";
+            int id = 4;
             CategoryService categoryService = new CategoryService();
             Boolean result = true;
             try
@@ -537,7 +537,7 @@ namespace UnitTestProject
         public void UpdateCategoryDescriptionNull()
         {
             String description = null;
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -555,7 +555,7 @@ namespace UnitTestProject
         public void UpdateCategoryDescriptionZeroCharacters()
         {
             String description = "";
-            int id = 4;
+            int id = 5;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -573,7 +573,7 @@ namespace UnitTestProject
         public void UpdateCategoryDescriptionThirtyCharacters()
         {
             String description = "abcdefghijabcdefghijabcdefghij";
-            int id = 4;
+            int id = 5;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -591,7 +591,7 @@ namespace UnitTestProject
         public void UpdateCategoryDescriptionTwoHundredCharacters()
         {
             String description = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
-            int id = 4;
+            int id = 5;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -609,7 +609,7 @@ namespace UnitTestProject
         public void UpdateCategoryDescriptionTwoHundredAndOneCharacters()
         {
             String description = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901";
-            int id = 4;
+            int id = 5;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -645,7 +645,7 @@ namespace UnitTestProject
         public void UpdateCategorySameDescription()
         {
             String description = "NullParentDescription";
-            int id = 6;
+            int id = 7;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             try
@@ -681,7 +681,7 @@ namespace UnitTestProject
         [TestMethod]
         public void deleteCategoryExistent()
         {
-            int id = 8;
+            int id = 9;
             CategoryService categoryService = new CategoryService();
             Boolean result = false;
             result = categoryService.DeleteCategory(id);
@@ -691,7 +691,7 @@ namespace UnitTestProject
         [TestMethod]
         public void deleteCategoryDependency()
         {
-            int id = 7;
+            int id = 8;
             CategoryService categoryService = new CategoryService();
             ProductService productService = new ProductService();
             Category category = categoryService.GetCategoryById(id);
@@ -733,7 +733,7 @@ namespace UnitTestProject
         [TestMethod]
         public void TestCategoryParentsCategory()
         {
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             ICollection<Category> categories = categoryService.getParents(id);
             Assert.AreEqual(categories.Count(), 1);
@@ -752,7 +752,7 @@ namespace UnitTestProject
         [TestMethod]
         public void TestCategoryChildrenCategory()
         {
-            int id = 1;
+            int id = 2;
             CategoryService categoryService = new CategoryService();
             ICollection<Category> categories = categoryService.getChildren(id);
             Assert.AreEqual(categories.Count(), 1);
