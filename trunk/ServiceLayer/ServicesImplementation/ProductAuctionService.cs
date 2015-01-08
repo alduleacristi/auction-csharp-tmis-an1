@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.ServicesImplementation
+namespace ServiceLayer
 {
     public class ProductAuctionService : IProductAuctionService
     {
@@ -18,17 +18,23 @@ namespace ServiceLayer.ServicesImplementation
             logger = AuctionLogger.GetInstance();
         }
 
-        public void AddProductAuction(User user, Product product, double price, Currency currency)
+        public bool AddProductAuction(User user, Product product, double price, Currency currency)
         {
             logger.logInfo("Try to add a new ProductAuction");
             try
             {
                 DataMapperFactoryMethod.GetCurrentFactory().ProductAuctionFactory.AddProductAuction(user, product, price, currency);
+                return true;
             }
             catch (ValidationException validationException)
             {
                 logger.logError(validationException);
                 throw validationException;
+            }
+            catch (EntityDoesNotExistException entity)
+            {
+                logger.logError(entity);
+                throw entity;
             }
         }
 
