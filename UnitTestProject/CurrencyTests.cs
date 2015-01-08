@@ -25,7 +25,7 @@ namespace UnitTestProject
         [TestMethod]
         public void GetCurrencyById()
         {
-            int id = 1;
+            int id = 2;
             CurrencyService currencyService = new CurrencyService();
             Currency currency = currencyService.getCurrencyById(id);
             Assert.AreEqual(currency.Name, "EURO");

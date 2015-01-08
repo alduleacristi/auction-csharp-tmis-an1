@@ -63,6 +63,7 @@
     <Compile Include="CurrencyTests.cs" />
     <Compile Include="ProductTests.cs" />
     <Compile Include="RoleTests.cs" />
+    <Compile Include="AuctionProductTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataMapper\DataMapper.csproj">
