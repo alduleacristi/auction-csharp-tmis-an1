@@ -74,6 +74,7 @@ namespace DataMapper.EFDataMapper
                     {
                         context.Entry(prodVar.Auction).Collection(p => p.ProductActions).Load();
                         context.Entry(prodVar.Auction).Reference(c => c.Currency).Load();
+                        context.Entry(prodVar.Auction).Reference(c => c.User).Load();
                     }
                 }
                 return prodVar;
