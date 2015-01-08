@@ -9,6 +9,6 @@ namespace ServiceLayer
 {
     public interface IProductAuctionService
     {
-        void AddProductAuction(User user, Product product, double price, Currency currency);
+        bool AddProductAuction(User user, Product product, double price, Currency currency);
     }
 }
