@@ -8,15 +8,8 @@ namespace DataMapper.Exceptions
 {
     public class AuctionException:ApplicationException
     {
-        public AuctionException():base()
-        {
-        }
 
         public AuctionException(String message):base(message)
-        {
-        }
-
-        public AuctionException(String message, Exception inner):base(message,inner)
         {
         }
     }
