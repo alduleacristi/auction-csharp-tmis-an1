@@ -15,18 +15,26 @@ namespace DataMapper.EFDataMapper
     {
         public void AddProductAuction(User user, Product product, double price, Currency currency)
         {
+            if (product == null)
+                throw new EntityDoesNotExistException("Product is null");
 
-            if (!this.verifyTheSameUser(product, user))
-                throw new ValidationException("The ownwer and the actioneer cannot be the same user");
+            if (user == null)
+                throw new EntityDoesNotExistException("User is null");
+
+            if (currency == null)
+                throw new EntityDoesNotExistException("Currency is null");
 
             if (!this.VerifyAuction(product))
                 throw new ValidationException("Cannot add a new auction for the selected product");
+            
+            if (this.verifyTheSameUser(product, user))
+                throw new ValidationException("The ownwer and the actioneer cannot be the same user");
 
             if (!this.IsInvalidAuction(product))
                 throw new ValidationException("Cannot add a new auction for the selected product because it is expired");
 
             if (!this.VerifyUser(user))
-                throw new ValidationException("The user is not an actioneer");
+                throw new ValidationException("The user is not actioneer");
 
             if (!this.VerifyCurrency(product, currency))
                 throw new ValidationException("The auction must have the same currency as the product: " + product.Auction.Currency.Name);
@@ -49,36 +57,22 @@ namespace DataMapper.EFDataMapper
             using (var context = new AuctionModelContainer())
             {
                 context.Auctions.Attach(product.Auction);
-                context.Currencies.Attach(currency);
+                //context.Currencies.Attach(ap.Currency);
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //context.Currencies.Attach(currency);
                 context.Products.Attach(product);
                 context.Users.Attach(user);
                 context.ProductAuctions.Add(ap);
-                try
-                {
-                    context.SaveChanges();
-                }
-                catch (System.Data.Entity.Validation.DbUnexpectedValidationException e)
-                {
-                    Console.WriteLine(e);
-                }
-                catch (DbEntityValidationException exc)
-                {
-                    String message = "Invalid fields for ProductAuction object.";
-                    IEnumerable<DbEntityValidationResult> errors = exc.EntityValidationErrors;
-                    foreach (DbEntityValidationResult error in errors)
-                        foreach (var validationError in error.ValidationErrors)
-                            message = message + " " + validationError.PropertyName + ". " + validationError.ErrorMessage;
-
-                    throw new ValidationException(message);
-                }
+                
+                context.SaveChanges();
             }
         }
 
         private Boolean verifyTheSameUser(Product product, User user)
         {
-            if (product.Auction.User.Equals(user))
-                return false;
-            return true;
+            if (product.Auction.User.Email.Equals(user.Email))
+                return true;
+            return false;
         }
 
         private Boolean IsInvalidAuction(Product product)
@@ -98,25 +92,21 @@ namespace DataMapper.EFDataMapper
         }
         private Boolean VerifyAuction(Product product)
         {
-            if (product == null)
-                return false;
-            Console.WriteLine("product not null");
             if (product.Auction == null)
                 return false;
-            Console.WriteLine("auction not null");
             return true;
         }
         private Boolean VerifyCurrency(Product product, Currency currency)
         {
-            if (product.Auction.Currency != currency)
+            if (product.Auction.Currency.IdCurrency != currency.IdCurrency)
                 return false;
             return true;
         }
         private Boolean VerifyPrice(Product product, double price)
         {
             //Console.WriteLine("VerifyPrice lower than 0");
-            //if (price <= 0)
-                //return false;
+            if (price <= 0)
+                return false;
             //Console.WriteLine("VerifyPrice lower than startPrice");
             if (price <= product.Auction.StartPrice)
                 return false;
@@ -128,7 +118,7 @@ namespace DataMapper.EFDataMapper
             DateTime maxDate = product.Auction.ProductActions.ElementAt(0).Date;
             foreach (ProductAuction pa in product.Auction.ProductActions)
             {
-                if( pa.Date > maxDate )
+                if( pa.Date >= maxDate )
                 {
                     maxDate = pa.Date;
                     lastAuction = pa.Price;
