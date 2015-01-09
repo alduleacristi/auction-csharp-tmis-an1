@@ -77,8 +77,22 @@ namespace DataMapper.EFDataMapper
 
         private Boolean IsInvalidAuction(Product product)
         {
-            if (product.Auction.EndDate < DateTime.Today || product.Auction.Finished == true)
+            if (product.Auction.EndDate <= DateTime.Today)
+            {
+                using (var context = new AuctionModelContainer())
+                {
+                    product.Auction.Finished = true;
+                    Auction auction = product.Auction;
+                    context.Auctions.Attach(auction);
+                    var entry = context.Entry(auction);
+                    entry.Property(r => r.Finished).IsModified = true;
+                    context.SaveChanges();
+                }
                 return false;
+            }
+            if (product.Auction.Finished == true)
+                return false;
+
             return true;
         }
 
@@ -154,6 +168,36 @@ namespace DataMapper.EFDataMapper
             }
             if (price <= lastAuction)
                 return false;
+            return true;
+        }
+
+        public bool closeAuction(User user, Product product)
+        {
+            if (user == null)
+                throw new EntityDoesNotExistException("User is null");
+
+            if (product == null)
+                throw new EntityDoesNotExistException("Product is null");
+
+            if (product.Auction == null)
+                throw new EntityDoesNotExistException("Auction is null");
+
+            if (!user.Email.Equals(product.Auction.User.Email))
+                throw new AuctionException("You are not allowed to close the auction - you are not the owner!");
+
+            if (product.Auction.Finished == true)
+                throw new AuctionException("Auction already closed");
+
+            using (var context = new AuctionModelContainer())
+            {
+                product.Auction.Finished = true;
+                Auction auction = product.Auction;
+                context.Auctions.Attach(auction);
+                var entry = context.Entry(auction);
+                entry.Property(r => r.Finished).IsModified = true;
+                context.SaveChanges();
+            }
+
             return true;
         }
     }
