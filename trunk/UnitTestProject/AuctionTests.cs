@@ -1,4 +1,5 @@
-﻿using DomainModel;
+﻿using DataMapper.Exceptions;
+using DomainModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceLayer;
 using ServiceLayer.Common;
@@ -31,7 +32,7 @@ namespace AuctionTests
         }
 
         [TestMethod]
-        public void AddLicitation()
+        public void TestAddLicitation()
         {
             User user1 = new User();
             user1.FirstName = "AAA";
@@ -59,6 +60,38 @@ namespace AuctionTests
             userService.AddRoleToUser("a@a.a", role);
 
             auctionService.AddNewAuction(user1, product, currency, 100, DateTime.Now, DateTime.Now);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void TestAddLicitationWithUserThatDoesNotExist()
+        {
+            User user = userService.GetUserById(5);
+            Product product = productService.GetProductById(1);
+            Currency currency = currencyService.GetCurrencyByName("RON");
+
+            auctionService.AddNewAuction(user, product, currency, 100, DateTime.Now, DateTime.Now);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(AuctionException))]
+        public void TestAddLicitationWithUserThatIsNotOwner()
+        {
+            User user = userService.GetUserById(1);
+            userService.RemoveRoleFromUser(user.Email, roleService.GetRoleByName(Constants.OWNER));
+
+            Product product = productService.GetProductById(1);
+            Currency currency = currencyService.GetCurrencyByName("RON");
+
+            auctionService.AddNewAuction(user, product, currency, 100, DateTime.Now, DateTime.Now);
+        }
+
+        [TestMethod]
+        public void TestGetNumberOfActiveLicitation()
+        {
+            int nr = auctionService.GetNumberOfActiveAuctionsStartedByUser(userService.GetUserById(1));
+
+            Assert.AreEqual(1, nr);
         }
     }
 }

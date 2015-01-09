@@ -30,7 +30,7 @@ namespace UnitTestProject
             Auction auction = auctionService.GetAuctionById(1);
             Role role = roleService.GetRoleByName("actioneer");
             userService.AddRoleToUser("a@a.a", role);
-            User user = userService.GetUserById(5);
+            User user = userService.GetUserById(1);
             Product product = productService.GetProductById(1);
             Double price = 100;
             Currency currency = currencyService.getCurrencyById(1);
@@ -55,7 +55,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Product product = productService.GetProductById(1);
             Double price = 0;
             Currency currency = currencyService.getCurrencyById(1);
@@ -80,7 +80,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Product product = productService.GetProductById(1);
             Double price = -1;
             Currency currency = currencyService.getCurrencyById(1);
@@ -105,7 +105,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Product product = productService.GetProductById(1);
             Double price = 1;
             Currency currency = currencyService.getCurrencyById(1);
@@ -130,7 +130,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Product product = productService.GetProductById(1);
             Double price = 100;
             Currency currency = currencyService.getCurrencyById(1);
@@ -155,7 +155,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Product product = productService.GetProductById(1);
             Double price = 101;
             Currency currency = currencyService.getCurrencyById(1);
@@ -188,7 +188,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Product product = productService.GetProductById(1);
             Double price = 101;
             Currency currency = currencyService.getCurrencyById(1);
@@ -213,7 +213,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Product product = productService.GetProductById(1);
             Double price = 100;
             Currency currency = currencyService.getCurrencyById(2);
@@ -236,7 +236,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Double price = 200;
             Currency currency = currencyService.getCurrencyById(2);
 
@@ -258,7 +258,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Double price = 200;
             Currency currency = currencyService.getCurrencyById(2);
 
@@ -288,7 +288,7 @@ namespace UnitTestProject
             Currency currency = currencyService.getCurrencyById(1);
 
             Role role = roleService.GetRoleByName("owner");
-            userService.AddRoleToUser("ab@bc.com", role);
+            userService.AddRoleToUser("dddd@eeee.com", role);
 
             User user = userService.GetUserById(3);
             try
@@ -317,9 +317,9 @@ namespace UnitTestProject
             Currency currency = currencyService.getCurrencyById(1);
 
             Role role = roleService.GetRoleByName("owner");
-            userService.AddRoleToUser("ab@bc.com", role);
+            userService.AddRoleToUser("aaa@bbb.com", role);
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             try
             {
                 productAuctionService.AddProductAuction(user, product, price, null);
@@ -339,7 +339,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(7);
+            User user = userService.GetUserById(3);
             Double price = 101;
             Currency currency = currencyService.getCurrencyById(1);
 
