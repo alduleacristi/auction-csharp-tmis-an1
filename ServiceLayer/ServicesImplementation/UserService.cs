@@ -1,6 +1,7 @@
 ﻿using DataMapper;
 using DataMapper.Exceptions;
 using DomainModel;
+using Microsoft.Practices.EnterpriseLibrary.Validation;
 using ServiceLayer.Common;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,18 @@ namespace ServiceLayer
             logger.logInfo("Try to add a new user.");
 
             try
-            { 
+            {
+                User oldUser = GetUserByEmail(user.Email);
+                if (oldUser != null)
+                    throw new DuplicateException("You can not add two users with the same email (" + user.Email + ").");
+
+                var validationResults = Validation.Validate<User>(user);
+                if (!validationResults.IsValid)
+                {
+                    String message = "Invalid fields for user "+user.Email;
+                    throw new ValidationException(message);
+                }
+
                 DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddUser(user);
                 logger.logInfo("The user with name " + user.FirstName +" "+user.LastName+ " was succesfully added.");
 
@@ -53,7 +65,19 @@ namespace ServiceLayer
 
             try
             {
-                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateFirstName(email, newFirstName);
+                User user = GetUserByEmail(email);
+                if (user == null)
+                    throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
+                user.FirstName = newFirstName;
+
+                var validationResults = Validation.Validate<User>(user);
+                if (!validationResults.IsValid)
+                {
+                    String message = "Invalid first name for user " + user.Email;
+                    throw new ValidationException(message);
+                }
+
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateFirstName(user, newFirstName);
                 logger.logInfo("First name was succesfully changed to " + newFirstName);
 
                 return true;
@@ -76,7 +100,19 @@ namespace ServiceLayer
 
             try
             {
-                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateLastName(email, newLastName);
+                User user = GetUserByEmail(email);
+                if (user == null)
+                    throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
+                user.LastName = newLastName;
+
+                var validationResults = Validation.Validate<User>(user);
+                if (!validationResults.IsValid)
+                {
+                    String message = "Invalid last name for user " + user.Email;
+                    throw new ValidationException(message);
+                }
+
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateLastName(user, newLastName);
                 logger.logInfo("Last name was succesfully changed to " + newLastName);
 
                 return true;
@@ -99,7 +135,24 @@ namespace ServiceLayer
 
             try
             {
-                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateEmail(oldEmail, newEmail);
+                User user = GetUserByEmail(oldEmail);
+                if (user == null)
+                    throw new EntityDoesNotExistException("The user with email " + oldEmail + " does not exist.");
+
+                User auxUser = GetUserByEmail(newEmail);
+                if (auxUser != null)
+                    throw new DuplicateException("A user with email {" + newEmail + "} already exist.");
+
+                user.Email = newEmail;
+
+                var validationResults = Validation.Validate<User>(user);
+                if (!validationResults.IsValid)
+                {
+                    String message = "Invalid email for user " + user.Email;
+                    throw new ValidationException(message);
+                }
+
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.UpdateEmail(user, newEmail);
                 logger.logInfo("Email was succesfully changed to " + newEmail);
 
                 return true;
@@ -146,20 +199,36 @@ namespace ServiceLayer
 
         public bool AddRoleToUser(String email,Role role)
         {
-            logger.logInfo("Try to add role " +role.Name+" to user with email " + email);
-            DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddRoleToUser(email,role);
-            logger.logInfo("Role " + role.Name + " was succesfully assigned to user with email " + email);
+            try 
+            {
+                User user = GetUserByEmail(email);
+                if (user == null)
+                    throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
 
-            return true;
+                logger.logInfo("Try to add role " +role.Name+" to user with email " + email);
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.AddRoleToUser(user,role);
+                logger.logInfo("Role " + role.Name + " was succesfully assigned to user with email " + email);
+
+                return true;
+            }
+            catch(EntityDoesNotExistException exc)
+            {
+                logger.logError(exc);
+                throw exc;
+            }
         }
 
         public bool RemoveRoleFromUser(String email,Role role)
         {
-            logger.logInfo("Try to remove role" + role.Name + " from user with email " + email);
-
             try 
-            { 
-                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.RemoveRoleFromUser(email, role);
+            {
+                logger.logInfo("Try to remove role" + role.Name + " from user with email " + email);
+
+                User user = GetUserByEmail(email);
+                if (user == null)
+                    throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
+
+                DataMapperFactoryMethod.GetCurrentFactory().UserFactory.RemoveRoleFromUser(user, role);
                 logger.logInfo("Role" + role.Name + " was succesfully removed from user with email " + email);
 
                 return true;
@@ -305,7 +374,16 @@ namespace ServiceLayer
         }
         public User GetUserById(int id)
         {
-            logger.logInfo("Try to get user by id from the db.");
-            return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetUserById(id);
-        }    }
+            try 
+            { 
+                logger.logInfo("Try to get user by id from the db.");
+                return DataMapperFactoryMethod.GetCurrentFactory().UserFactory.GetUserById(id);
+            }
+            catch(EntityDoesNotExistException exc)
+            {
+                logger.logError(exc);
+                throw exc;
+            }
+        }    
+    }
 }
