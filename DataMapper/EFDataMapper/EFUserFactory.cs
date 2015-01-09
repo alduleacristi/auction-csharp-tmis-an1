@@ -28,36 +28,15 @@ namespace DataMapper.EFDataMapper
         }
         public void AddUser(User user)
         {
-            User oldUser = GetUserByEmail(user.Email);
-            if(oldUser != null)
-                throw new DuplicateException("You can not add two users with the same email ("+ user.Email+").");
-            
             using(var context = new AuctionModelContainer())
             {
                 context.Users.Add(user);
-                try
-                {
-                    context.SaveChanges();
-                }
-                catch(DbEntityValidationException exc)
-                {
-                    String message = "Invalid fields for user object.";
-                    IEnumerable<DbEntityValidationResult> errors = exc.EntityValidationErrors;
-                    foreach (DbEntityValidationResult error in errors)
-                        foreach (var validationError in error.ValidationErrors)
-                            message = message + " "+validationError.PropertyName + ". "+ validationError.ErrorMessage;
-
-                    throw new ValidationException(message);
-                }
+                context.SaveChanges();
             }
         }
 
-        public void UpdateFirstName(String email, String newFirstName)
+        public void UpdateFirstName(User user, String newFirstName)
         {
-            User user = GetUserByEmail(email);
-            if(user == null)
-                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
-
             if(!user.FirstName.Equals(newFirstName))
             {
                 user.FirstName = newFirstName;
@@ -68,29 +47,13 @@ namespace DataMapper.EFDataMapper
                     var entry = context.Entry(user);
                     entry.Property(u => u.FirstName).IsModified = true;
 
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (DbEntityValidationException exc)
-                    {
-                        String message = "Invalid fields for user object.";
-                        IEnumerable<DbEntityValidationResult> errors = exc.EntityValidationErrors;
-                        foreach (DbEntityValidationResult error in errors)
-                            foreach (var validationError in error.ValidationErrors)
-                                message = message + " " + validationError.PropertyName + ". " + validationError.ErrorMessage;
-                        throw new ValidationException(message);
-                    }
+                    context.SaveChanges();
                 }
             }
         }
 
-        public void UpdateLastName(String email,String newLastName)
+        public void UpdateLastName(User user,String newLastName)
         {
-            User user = GetUserByEmail(email);
-            if (user == null)
-                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
-
             if (!user.LastName.Equals(newLastName))
             {
                 user.LastName = newLastName;
@@ -101,55 +64,22 @@ namespace DataMapper.EFDataMapper
                     var entry = context.Entry(user);
                     entry.Property(u => u.LastName).IsModified = true;
 
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (DbEntityValidationException exc)
-                    {
-                        String message = "Invalid fields for user object.";
-                        IEnumerable<DbEntityValidationResult> errors = exc.EntityValidationErrors;
-                        foreach (DbEntityValidationResult error in errors)
-                            foreach (var validationError in error.ValidationErrors)
-                                message = message + " " + validationError.PropertyName + ". " + validationError.ErrorMessage;
-                        throw new ValidationException(message);
-                    }
+                    context.SaveChanges();
                 }
             }
         }
 
-        public void UpdateEmail(String oldEmail, String newEmail)
+        public void UpdateEmail(User user, String newEmail)
         {
-            User user = GetUserByEmail(oldEmail);
-            if (user == null)
-                throw new EntityDoesNotExistException("The user with email " + oldEmail + " does not exist.");
-
-            if (!oldEmail.Equals(newEmail))
+            if (!user.Email.Equals(newEmail))
             {
-                User auxUser = GetUserByEmail(newEmail);
-                if (auxUser != null)
-                    throw new DuplicateException("A user with email {" + newEmail + "} already exist.");
-                user.Email = newEmail;
-
                 using (var context = new AuctionModelContainer())
                 {
                     context.Users.Attach(user);
                     var entry = context.Entry(user);
                     entry.Property(u => u.Email).IsModified = true;
 
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (DbEntityValidationException exc)
-                    {
-                        String message = "Invalid fields for user object.";
-                        IEnumerable<DbEntityValidationResult> errors = exc.EntityValidationErrors;
-                        foreach (DbEntityValidationResult error in errors)
-                            foreach (var validationError in error.ValidationErrors)
-                                message = message + " " + validationError.PropertyName + ". " + validationError.ErrorMessage;
-                        throw new ValidationException(message);
-                    }
+                    context.SaveChanges();
                 }
             }
         }
@@ -174,12 +104,8 @@ namespace DataMapper.EFDataMapper
             }
         }
 
-        public void AddRoleToUser(String email,Role role)
+        public void AddRoleToUser(User user,Role role)
         {
-            User user = GetUserByEmail(email);
-            if (user == null)
-                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
-
             using(var context = new AuctionModelContainer())
             {
                 context.setLazyFalse();
@@ -193,12 +119,8 @@ namespace DataMapper.EFDataMapper
             }
         }
 
-        public void RemoveRoleFromUser(String email,Role role)
+        public void RemoveRoleFromUser(User user,Role role)
         {
-            User user = GetUserByEmail(email);
-            if (user == null)
-                throw new EntityDoesNotExistException("The user with email " + email + " does not exist.");
-
             using (var context = new AuctionModelContainer())
             {
                 context.setLazyFalse();
@@ -209,7 +131,7 @@ namespace DataMapper.EFDataMapper
                 context.Entry(role).Collection(r => r.Users).Load();
 
                 if (!user.Roles.Contains(role))
-                   throw new EntityDoesNotExistException("User with email "+email+" hasn't the role with name "+role.Name+" so it can't be remove.");
+                   throw new EntityDoesNotExistException("User with email "+user.Email+" hasn't the role with name "+role.Name+" so it can't be remove.");
 
                 user.Roles.Remove(role);
   
@@ -320,6 +242,10 @@ namespace DataMapper.EFDataMapper
                 var userVar = (from user in context.Users
                                where user.IdUser.Equals(id)
                                select user).FirstOrDefault();
+
+                if (userVar == null)
+                    throw new EntityDoesNotExistException("User with "+id+" does not exist");
+
                 context.Users.Attach(userVar);
                 context.Entry(userVar).Collection(user => user.Roles).Load();
                 return userVar;
