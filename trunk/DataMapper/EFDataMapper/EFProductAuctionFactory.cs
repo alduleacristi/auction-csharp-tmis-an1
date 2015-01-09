@@ -81,9 +81,37 @@ namespace DataMapper.EFDataMapper
                 return false;
             return true;
         }
+
+        private ICollection<Role> GetAllRolesOfAUser(User user)
+        {
+                using (var context = new AuctionModelContainer())
+                {
+                    var roleVar = (from role in context.Roles
+                                   select role).ToList();
+
+                    for (int i = 0; i < roleVar.Count; i++)
+                    {
+                        ICollection<User> users = roleVar.ElementAt(i).Users;
+                        bool ok = false;
+                        foreach (User userFor in users)
+                            if (userFor.Email.Equals(user.Email))
+                                ok = true;
+                        if (!ok)
+                        {
+                            roleVar.Remove(roleVar.ElementAt(i));
+                            i--;
+                        }
+                    }
+
+                    return roleVar;
+            }
+        }
+
         private Boolean VerifyUser(User user)
         {
-            foreach (Role role in user.Roles)
+            ICollection<Role> roles = this.GetAllRolesOfAUser(user);
+
+            foreach (Role role in roles)
             {
                 if (role.Name.Equals("actioneer"))
                     return true;
