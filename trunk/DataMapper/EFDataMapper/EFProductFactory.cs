@@ -149,8 +149,8 @@ namespace DataMapper.EFDataMapper
             using (var context = new AuctionModelContainer())
             {
                 context.Products.Attach(product);
-                if(product.Auction!=null)
-                    context.Entry(product).Collection(prod => prod.Auction.ProductActions).Load();
+                //if(product.Auction!=null)
+                    //context.Entry(product).Collection(prod => prod.Auction.ProductActions).Load();
                 if (product.Auction != null)
                 {
                    // if (product.Auction.ProductActions.Count() > 0)
