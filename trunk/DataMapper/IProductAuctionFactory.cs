@@ -10,5 +10,7 @@ namespace DataMapper
     public interface IProductAuctionFactory
     {
         void AddProductAuction(User user, Product product, double price, Currency currency);
+
+        bool closeAuction(User user, Product product);
     }
 }
