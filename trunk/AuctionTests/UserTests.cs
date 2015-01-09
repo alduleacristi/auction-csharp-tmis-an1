@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AuctionTests
 {
-    [TestClass]
+    /*[TestClass]
     public class UserTests
     {
         private IUserService userService;
@@ -138,7 +138,7 @@ namespace AuctionTests
             bool ok = userService.UpdateFirstName("ab@bc.com", "ABC");
 
             Assert.IsTrue(ok);
-        }
+        }*/
 
       /*  [TestMethod]
         [ExpectedException(typeof(ValidationException))]
@@ -219,6 +219,6 @@ namespace AuctionTests
         public void TestAddUserWithInvalidEmailException()
         {
             bool ok = userService.AddUser(new User { LastName = "AAA", FirstName = "BBB", Email = null });
-        }*/
-    }
+        }
+    }*/
 }
