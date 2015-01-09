@@ -11,13 +11,13 @@ namespace DataMapper
     {
         void AddUser(User user);
         User GetUserByEmail(String email);
-        void UpdateFirstName(String email, String newFirstName);
-        void UpdateLastName(String email, String newLastName);
-        void UpdateEmail(String oldEmail, String newEmail);
+        void UpdateFirstName(User user, String newFirstName);
+        void UpdateLastName(User user, String newLastName);
+        void UpdateEmail(User user, String newEmail);
         void DropUser(String email);
-        void AddRoleToUser(String email,Role role);
-        void RemoveRoleFromUser(String email, Role role);
-ICollection<User> GetAllUsersThatParticipateToAnAuction(Auction auction);
+        void AddRoleToUser(User user,Role role);
+        void RemoveRoleFromUser(User user, Role role);
+        ICollection<User> GetAllUsersThatParticipateToAnAuction(Auction auction);
         ICollection<User> GetAllUsersThatGiveARaitingToAUser(User user);
         void AddRating(Rating rating);
         ICollection<Rating> GetAllRatingsOfAnUser(User user);
