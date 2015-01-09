@@ -18,6 +18,26 @@ namespace ServiceLayer
             logger = AuctionLogger.GetInstance();
         }
 
+        public bool closeAuction(User user, Product product)
+        {
+            logger.logInfo("Try to close a auction");
+            try
+            {
+                DataMapperFactoryMethod.GetCurrentFactory().ProductAuctionFactory.closeAuction(user, product);
+            }
+            catch (EntityDoesNotExistException exc)
+            {
+                logger.logError(exc);
+                throw exc;
+            }
+            catch (AuctionException exc)
+            {
+                logger.logError(exc);
+                throw exc;
+            }
+            return true;
+        }
+
         public bool AddProductAuction(User user, Product product, double price, Currency currency)
         {
             logger.logInfo("Try to add a new ProductAuction");
