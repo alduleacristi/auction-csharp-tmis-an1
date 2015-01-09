@@ -661,30 +661,6 @@ namespace UnitTestProject
             result = productService.DeleteProduct(id);
             Assert.AreEqual(result, true);
         }
-        /*
-                [TestMethod]
-                public void deleteExistentProductDependency()
-                {
-                    int id = 9;
-                    ProductService productService = new ProductService();
-                    CategoryService categoryService = new CategoryService();
-                    Product p = new Product();
-                    p.Name = "Prod";
-                    p.Description = "Desc";
-                    p.Categories.Add(categoryService.GetCategoryById(2));
-                    p.Auction = new Auction();
-                    Boolean result = false;
-                    productService.AddProduct(p);
-                    try
-                    {
-                        result = productService.DeleteProduct(id);
-                    }
-                    catch (DependencyException e)
-                    {
-                        Assert.AreEqual("The product has auctions. It cannot be deleted!", e.Message);
-                    }
-                    Assert.AreEqual(result, false);
-                }*/
 
         [TestMethod]
         public void GetProductsOfACategory()

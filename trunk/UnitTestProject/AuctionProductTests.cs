@@ -380,5 +380,212 @@ namespace UnitTestProject
                 Assert.AreEqual("The user is not actioneer", exc.Message);
             }
         }
+
+        [TestMethod]
+        public void deleteExistentProductDependency()
+        {
+
+            int id = 1;
+            ProductService productService = new ProductService();
+            Boolean result = false;
+            try
+            {
+                result = productService.DeleteProduct(id);
+            }
+            catch (DependencyException e)
+            {
+                Assert.AreEqual("The product has auctions. It cannot be deleted!", e.Message);
+            }
+            Assert.AreEqual(result, false);
+        }
+
+        [TestMethod]
+        public void TestFinishAuctionNullUser()
+        {
+            ProductService productService = new ProductService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+
+            Product product = productService.GetProductById(1);
+            Boolean result = false;
+
+            try
+            {
+                productAuctionService.closeAuction(null, product);
+            }
+            catch(EntityDoesNotExistException exc)
+            {
+                Assert.AreEqual("User is null", exc.Message);
+            }
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void TestFinishAuctionNullProduct()
+        {
+            UserService userService = new UserService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+
+            User user = userService.GetUserById(1);
+            Boolean result = false;
+
+            try
+            {
+                productAuctionService.closeAuction(user, null);
+            }
+            catch (EntityDoesNotExistException exc)
+            {
+                Assert.AreEqual("Product is null", exc.Message);
+            }
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void TestFinishAuctionNullAuction()
+        {
+            UserService userService = new UserService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+
+            User user = userService.GetUserById(1);
+            Boolean result = false;
+
+            try
+            {
+                productAuctionService.closeAuction(user, new Product());
+            }
+            catch (EntityDoesNotExistException exc)
+            {
+                Assert.AreEqual("Auction is null", exc.Message);
+            }
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void TestFinishAuctionNotTheSameUser()
+        {
+            UserService userService = new UserService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+            ProductService productService = new ProductService();
+
+            User user = userService.GetUserById(2);
+            Product product = productService.GetProductById(1);
+            Boolean result = false;
+
+            try
+            {
+                productAuctionService.closeAuction(user, product);
+            }
+            catch (AuctionException exc)
+            {
+                Assert.AreEqual("You are not allowed to close the auction - you are not the owner!", exc.Message);
+            }
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void TestFinishAuction()
+        {
+            UserService userService = new UserService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+            ProductService productService = new ProductService();
+
+            User user = userService.GetUserById(1);
+            Product product = productService.GetProductById(1);
+            Boolean result = false;
+
+            try
+            {
+                result = productAuctionService.closeAuction(user, product);
+            }
+            catch (AuctionException exc)
+            {
+                Assert.AreEqual("", exc.Message);
+            }
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void TestFinishAuctionAlreadyFinished()
+        {
+            UserService userService = new UserService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+            ProductService productService = new ProductService();
+
+            User user = userService.GetUserById(1);
+            Product product = productService.GetProductById(1);
+            Boolean result = false;
+
+            try
+            {
+                result = productAuctionService.closeAuction(user, product);
+            }
+            catch (AuctionException exc)
+            {
+                Assert.AreEqual("Auction already closed", exc.Message);
+            }
+            Assert.IsFalse(result);
+        }
+
+
+        [TestMethod]
+        public void TestAddProductAuctionInvalidDate()
+        {
+            AuctionService auctionService = new AuctionService();
+            ProductService productService = new ProductService();
+            CurrencyService currencyService = new CurrencyService();
+            UserService userService = new UserService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+            RoleService roleService = new RoleService();
+
+            User user = userService.GetUserById(3);
+            Product product = productService.GetProductById(1);
+            Double price = 101;
+            Currency currency = currencyService.getCurrencyById(1);
+
+            product.Auction.EndDate = DateTime.Today;
+
+            Boolean result = false;
+            try
+            {
+                result = productAuctionService.AddProductAuction(user, product, price, currency);
+            }
+            catch (ValidationException exc)
+            {
+                Assert.AreEqual("Cannot add a new auction for the selected product because it is expired", exc.Message);
+            }
+            Assert.AreEqual(result, false);
+        }
+
+        [TestMethod]
+        public void AddProductAuctionAlreadyFinished()
+        {
+            AuctionService auctionService = new AuctionService();
+            ProductService productService = new ProductService();
+            CurrencyService currencyService = new CurrencyService();
+            UserService userService = new UserService();
+            ProductAuctionService productAuctionService = new ProductAuctionService();
+            RoleService roleService = new RoleService();
+
+            User user = userService.GetUserById(3);
+            Product product = productService.GetProductById(1);
+            Double price = 101;
+            Currency currency = currencyService.getCurrencyById(1);
+            Boolean result = false;
+
+            try
+            {
+                result = productAuctionService.AddProductAuction(user, product, price, currency);
+            }
+            catch (AuctionException exc)
+            {
+                Assert.AreEqual("Cannot add a new auction for the selected product because it is expired", exc.Message);
+            }
+            Assert.IsFalse(result);
+        }
+
+        
     }
 }
