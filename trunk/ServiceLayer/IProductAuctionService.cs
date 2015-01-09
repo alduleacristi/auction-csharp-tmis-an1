@@ -10,5 +10,6 @@ namespace ServiceLayer
     public interface IProductAuctionService
     {
         bool AddProductAuction(User user, Product product, double price, Currency currency);
+        bool closeAuction(User user, Product product);
     }
 }
