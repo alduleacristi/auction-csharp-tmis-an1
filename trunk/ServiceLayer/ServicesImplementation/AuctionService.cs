@@ -130,11 +130,6 @@ namespace ServiceLayer
             }
         }
 
-        public Currency GetCurrencyByName(String currencyName)
-        {
-            return DataMapperFactoryMethod.GetCurrentFactory().AuctionFactory.GetCurrencyByName(currencyName);
-        }
-
         public int GetNumberOfActiveAuctionsStartedByUser(User user)
         {
             return DataMapperFactoryMethod.GetCurrentFactory().AuctionFactory.GetNumberOfActiveAuctionsStartedByUser(user);
