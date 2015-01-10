@@ -189,6 +189,17 @@ namespace DataMapper.EFDataMapper
             }
         }
 
+        public void RemoveRating(Rating rating)
+        {
+            using(var context = new AuctionModelContainer())
+            {
+                context.Ratings.Attach(rating);
+                context.Ratings.Remove(rating);
+
+                context.SaveChanges();
+            }
+        }
+
         public void UpdateRating(Rating rating)
         {
             using (var context = new AuctionModelContainer())
@@ -248,6 +259,8 @@ namespace DataMapper.EFDataMapper
 
                 context.Users.Attach(userVar);
                 context.Entry(userVar).Collection(user => user.Roles).Load();
+                context.Entry(userVar).Collection(user => user.Auctions).Load();
+                context.Entry(userVar).Collection(user => user.GivedRatings).Load();
                 return userVar;
             }
         }    }
