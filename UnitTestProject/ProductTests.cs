@@ -408,7 +408,7 @@ namespace UnitTestProject
             productService.AddProduct(product);
 
             String name = "Product";
-            int id = 9;
+            int id = 19;
             Product p = productService.GetProductById(id);
             Boolean result = false;
             try
@@ -621,7 +621,7 @@ namespace UnitTestProject
             productService.AddProduct(product);
 
             String desc = "abcdefghijabcdefghijabcdefghij";
-            int id = 10;
+            int id = 18;
 
             Boolean result = false;
             try
@@ -702,7 +702,7 @@ namespace UnitTestProject
         {
             ProductService productService = new ProductService();
             ICollection<Product> products = productService.GetProductsByNameAndDescription("Product", "");
-            Assert.AreEqual(products.Count(), 2);
+            Assert.AreEqual(products.Count(), 1);
         }
 
         [TestMethod]
