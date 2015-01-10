@@ -1,6 +1,7 @@
 ﻿using DataMapper;
 using DataMapper.Exceptions;
 using DomainModel;
+using Microsoft.Practices.EnterpriseLibrary.Validation;
 using ServiceLayer.Common;
 using System;
 using System.Collections.Generic;
@@ -38,12 +39,15 @@ namespace ServiceLayer
 
             int sum = 0;
             int nr = 0;
+            DateTime maxDate = new DateTime(1000, 1, 1);
             foreach (Rating rating in ratings)
             {
                 if ((DateTime.Now - rating.Date).TotalDays < configuration.GetValue(Constants.NR_OF_DAYS_USED_TO_DETERMINE_RATING))
                 {
                     sum += rating.Grade;
                     nr++;
+                    if (rating.Date > maxDate)
+                        maxDate = rating.Date;
                 }
             }
 
@@ -61,7 +65,17 @@ namespace ServiceLayer
             int intMaxNrOfAuctions = (int)maxNrOfAuctions;
             
             if(ratingCalc < configuration.GetValue(Constants.RATING_THRESH_HOLD_FOR_AUCTION))
-                throw new AuctionException("Auction can not be added because the rating of the user is small than " + configuration.GetValue(Constants.RATING_THRESH_HOLD_FOR_AUCTION));
+            { 
+                if((DateTime.Now - maxDate).Days >= configuration.GetValue(Constants.NR_OF_DAY_BEFORE_RATING_RESET))
+                {
+                    for(int i=0;i<ratings.Count;i++)
+                    {
+                        DataMapperFactoryMethod.GetCurrentFactory().UserFactory.RemoveRating(ratings.ElementAt(i));
+                    }
+                }
+                else
+                    throw new AuctionException("Auction can not be added because the rating of the user is small than " + configuration.GetValue(Constants.RATING_THRESH_HOLD_FOR_AUCTION) + "resetare");
+            }
 
             if (nrOfActiveAuctions > intMaxNrOfAuctions)
                 throw new AuctionException("Auction can not be added because max number of auctions per user is "+configuration.GetValue(Constants.MAX_NR_OF_STARTED_AUCTION));
@@ -91,7 +105,7 @@ namespace ServiceLayer
                 }
             }
 
-            if(nrOfAuctions > configuration.GetValue(Constants.MAX_NR_OF_AUCTION_ASSOCIATE_WITH_CATEGORY))
+            if(nrOfAuctions >= configuration.GetValue(Constants.MAX_NR_OF_AUCTION_ASSOCIATE_WITH_CATEGORY))
                 throw new AuctionException("The auction can not be added because the number of auctions per category was exceeded");
         }
         public void AddNewAuction(User user,Product product,Currency currency,double startPrice,DateTime startDate,DateTime endDate)
@@ -110,6 +124,12 @@ namespace ServiceLayer
                 auction.StartPrice = startPrice;
                 auction.BeginDate = startDate;
                 auction.EndDate = endDate;
+
+                var validationResults = Validation.Validate<Auction>(auction);
+                if (!validationResults.IsValid)
+                {
+                    throw new ValidationException("Invalid auction");
+                }
 
                 DataMapperFactoryMethod.GetCurrentFactory().AuctionFactory.AddNewAuction(auction);
             }
@@ -136,7 +156,16 @@ namespace ServiceLayer
         }
         public Auction GetAuctionById(int id)
         {
-            //logger.logInfo("Try to get auction by id from the db.");
-            return DataMapperFactoryMethod.GetCurrentFactory().AuctionFactory.GetAuctionById(id);
-        }    }
+            try
+            { 
+                logger.logInfo("Try to get auction by id from the db.");
+                return DataMapperFactoryMethod.GetCurrentFactory().AuctionFactory.GetAuctionById(id);
+            }
+            catch(EntityDoesNotExistException exc)
+            {
+                logger.logError(exc);
+                throw exc;
+            }
+        }   
+    }
 }
