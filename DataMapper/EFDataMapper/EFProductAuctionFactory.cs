@@ -24,6 +24,14 @@ namespace DataMapper.EFDataMapper
             if (currency == null)
                 throw new EntityDoesNotExistException("Currency is null");
 
+            ProductAuction ap = new ProductAuction();
+            ap.User = user;
+            ap.Price = price;
+            ap.Currency = currency;
+            ap.Auction = product.Auction;
+            ap.Date = DateTime.Now;
+            var validationResults = Validation.Validate<ProductAuction>(ap);
+
             if (!this.VerifyAuction(product))
                 throw new ValidationException("Cannot add a new auction for the selected product");
             
@@ -42,12 +50,6 @@ namespace DataMapper.EFDataMapper
             if (!this.VerifyPrice(product, price))
                 throw new ValidationException("The price is too low");
 
-            ProductAuction ap = new ProductAuction();
-            ap.User = user;
-            ap.Price = price;
-            ap.Currency = currency;
-            ap.Auction = product.Auction;
-            ap.Date = DateTime.Now;
             /*if (ap.Currency == null)
                 Console.WriteLine("ap.Cur e null");
             if (ap.Auction.Currency == null)
