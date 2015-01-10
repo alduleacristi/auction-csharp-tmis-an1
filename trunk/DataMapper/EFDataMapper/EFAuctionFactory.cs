@@ -1,4 +1,5 @@
-﻿using DomainModel;
+﻿using DataMapper.Exceptions;
+using DomainModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,8 @@ namespace DataMapper.EFDataMapper
 
                 return nr;
             }
-        }        public Auction GetAuctionById(int id)
+        } 
+        public Auction GetAuctionById(int id)
         {
             using (var context = new AuctionModelContainer())
             {
@@ -51,6 +53,9 @@ namespace DataMapper.EFDataMapper
                 var auctionVar = (from auction in context.Auctions
                                where auction.IdAuction.Equals(id)
                                select auction).FirstOrDefault();
+
+                if (auctionVar == null)
+                    throw new EntityDoesNotExistException("Auction with id "+id+" does not exist");
                 context.Auctions.Attach(auctionVar);
                 //context.Entry(auctionVar).Collection(pAux => pAux.Categories).Load();
                 context.Entry(auctionVar).Reference(pAux => pAux.Product).Load();
