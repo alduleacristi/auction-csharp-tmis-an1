@@ -55,7 +55,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             Product product = productService.GetProductById(1);
             Double price = 0;
             Currency currency = currencyService.getCurrencyById(1);
@@ -80,7 +80,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             Product product = productService.GetProductById(1);
             Double price = -1;
             Currency currency = currencyService.getCurrencyById(1);
@@ -105,7 +105,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             Product product = productService.GetProductById(1);
             Double price = 1;
             Currency currency = currencyService.getCurrencyById(1);
@@ -130,7 +130,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             Product product = productService.GetProductById(1);
             Double price = 100;
             Currency currency = currencyService.getCurrencyById(1);
@@ -155,9 +155,9 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             Product product = productService.GetProductById(1);
-            Double price = 101;
+            Double price = 1000;
             Currency currency = currencyService.getCurrencyById(1);
 
             Assert.IsNotNull(currency.IdCurrency);
@@ -188,7 +188,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             Product product = productService.GetProductById(1);
             Double price = 101;
             Currency currency = currencyService.getCurrencyById(1);
@@ -213,7 +213,7 @@ namespace UnitTestProject
             ProductAuctionService productAuctionService = new ProductAuctionService();
             RoleService roleService = new RoleService();
 
-            User user = userService.GetUserById(3);
+            User user = userService.GetUserById(2);
             Product product = productService.GetProductById(1);
             Double price = 100;
             Currency currency = currencyService.getCurrencyById(2);
@@ -284,7 +284,7 @@ namespace UnitTestProject
 
             
             Product product = productService.GetProductById(1);
-            Double price = 200;
+            Double price = 2000;
             Currency currency = currencyService.getCurrencyById(1);
 
             Role role = roleService.GetRoleByName("owner");
@@ -367,10 +367,10 @@ namespace UnitTestProject
 
 
             Product product = productService.GetProductById(1);
-            Double price = 200;
+            Double price = 20000;
             Currency currency = currencyService.getCurrencyById(1);
 
-            User user = userService.GetUserById(2);
+            User user = userService.GetUserById(3);
             try
             {
                 productAuctionService.AddProductAuction(user, product, price, currency);
