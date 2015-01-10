@@ -20,6 +20,7 @@ namespace DataMapper
         ICollection<User> GetAllUsersThatParticipateToAnAuction(Auction auction);
         ICollection<User> GetAllUsersThatGiveARaitingToAUser(User user);
         void AddRating(Rating rating);
+        void RemoveRating(Rating rating);
         ICollection<Rating> GetAllRatingsOfAnUser(User user);
         void UpdateRating(Rating rating);
         Rating GetRating(User givingRating, User receivingRating);
