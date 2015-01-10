@@ -407,8 +407,8 @@ namespace UnitTestProject
             ProductService productService = new ProductService();
             productService.AddProduct(product);
 
-            String name = "123456789012345678901234567890";
-            int id = 8;
+            String name = "Product";
+            int id = 9;
             Product p = productService.GetProductById(id);
             Boolean result = false;
             try
@@ -445,7 +445,7 @@ namespace UnitTestProject
         public void UpdateProductSameName()
         {
             String name = "product";
-            int id = 6;
+            int id = 7;
             ProductService productService = new ProductService();
 
             Boolean result = false;
@@ -484,7 +484,7 @@ namespace UnitTestProject
         public void UpdateProductDescriptionZeroCharacters()
         {
             String description = "";
-            int id = 8;
+            int id = 9;
             ProductService ProductService = new ProductService();
             Boolean result = false;
             try
@@ -575,7 +575,7 @@ namespace UnitTestProject
         public void UpdateProductSameDescription()
         {
             String description = "abcdefghijabcdefghijabcdefghij";
-            int id = 6;
+            int id = 7;
             ProductService productService = new ProductService();
 
             Boolean result = false;
@@ -621,7 +621,7 @@ namespace UnitTestProject
             productService.AddProduct(product);
 
             String desc = "abcdefghijabcdefghijabcdefghij";
-            int id = 9;
+            int id = 10;
 
             Boolean result = false;
             try
@@ -655,7 +655,7 @@ namespace UnitTestProject
         [TestMethod]
         public void DeleteProductExistent()
         {
-            int id = 8;
+            int id = 20;
             ProductService productService = new ProductService();
             Boolean result = false;
             result = productService.DeleteProduct(id);
@@ -669,14 +669,14 @@ namespace UnitTestProject
             ProductService productService = new ProductService();
             Category category = categoryService.GetCategoryById(8);
             ICollection<Product> products = productService.GetAllProductsOfACategory(category);
-            Assert.AreEqual(products.Count(), 1);
+            Assert.AreEqual(products.Count(), 2);
         }
 
         [TestMethod]
         public void GetAuctionOfAProduct()
         {
             ProductService productService = new ProductService();
-            Product product = productService.GetProductById(2);
+            Product product = productService.GetProductById(16);
             Auction auction = productService.GetAuctionOfAProduct(product);
             Assert.IsNull(auction);
         }
@@ -685,8 +685,8 @@ namespace UnitTestProject
         public void GetProductExistentById()
         {
             ProductService productService = new ProductService();
-            Product product = productService.GetProductById(2);
-            Assert.AreEqual(product.Description, "Description");
+            Product product = productService.GetProductById(3);
+            Assert.AreEqual("AAAAAAAA8" ,product.Description);
         }
 
         [TestMethod]
@@ -702,7 +702,7 @@ namespace UnitTestProject
         {
             ProductService productService = new ProductService();
             ICollection<Product> products = productService.GetProductsByNameAndDescription("Product", "");
-            Assert.AreEqual(products.Count(), 1);
+            Assert.AreEqual(products.Count(), 2);
         }
 
         [TestMethod]

@@ -323,7 +323,7 @@ namespace UnitTestProject
         }
 
         [TestMethod]
-        public void TestAddNote()
+        public void TestAddNoteToUserValid()
         {
             User user1 = new User();
             user1.FirstName = "AAA";
@@ -347,10 +347,309 @@ namespace UnitTestProject
 
             auctionService.AddNewAuction(user2, product, currency, 100, DateTime.Now, new DateTime(2015, 10, 18));
             productAuctionService.AddProductAuction(user1, product, 101, currency);
-            
-            bool ok = userService.AddNoteToUser(user1,user2,10);
+
+            bool ok = userService.AddNoteToUser(user1, user2, 10);
 
             Assert.IsTrue(ok);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(AuctionException))]
+        public void TestAddNoteToTheSameUser()
+        {
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            
+            bool ok = userService.AddNoteToUser(user1, user1, 10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void TestAddNoteWithFirstUserNull()
+        {
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+
+            bool ok = userService.AddNoteToUser(null, user1, 10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void TestAddNoteWithSecondUserNull()
+        {
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+
+            bool ok = userService.AddNoteToUser(user2, null, 10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void TestAddNoteWithBothUsersNull()
+        {
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+
+            bool ok = userService.AddNoteToUser(null, null, 10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(AuctionException))]
+        public void TestAddNoteByAUserThatNotParticipateToAuction()
+        {
+            User user1 = new User();
+            user1.FirstName = "AAA6";
+            user1.LastName = "AAA6";
+            user1.Email = "aa6@aa.a";
+            userService.AddUser(user1);
+
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+
+            bool ok = userService.AddNoteToUser(user1, user2, 10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(AuctionException))]
+        public void TestAddDuplicateNote()
+        {
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+
+            bool ok = userService.AddNoteToUser(user1, user2, 10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void TestAddNegativeNote()
+        {
+            User user1 = new User();
+            user1.FirstName = "AAA2";
+            user1.LastName = "AAA2";
+            user1.Email = "aa2@aa.a";
+
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            Category category = categoryService.GetCategoryByName("category");
+
+            Product product = new Product();
+            product.Name = "BBBB2";
+            product.Description = "BBBB2";
+            product.Categories.Add(category);
+
+            userService.AddUser(user1);
+            productService.AddProduct(product);
+            //currencyService.AddCurrency("RON");
+            Currency currency = currencyService.getCurrencyById(1);
+            Role role = roleService.GetRoleByName(Constants.ACTIONEER);
+            userService.AddRoleToUser("aa2@aa.a", role);
+
+            auctionService.AddNewAuction(user2, product, currency, 100, DateTime.Now, new DateTime(2015, 10, 18));
+            productAuctionService.AddProductAuction(user1, product, 101, currency);
+
+            bool ok = userService.AddNoteToUser(user1, user2, -1);
+        }
+
+        [TestMethod]
+        public void TestAddNoteOne()
+        {
+            User user1 = new User();
+            user1.FirstName = "AAA3";
+            user1.LastName = "AAA3";
+            user1.Email = "aa3@aa.a";
+
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            Category category = categoryService.GetCategoryByName("category");
+
+            Product product = new Product();
+            product.Name = "BBBB3";
+            product.Description = "BBBB3";
+            product.Categories.Add(category);
+
+            userService.AddUser(user1);
+            productService.AddProduct(product);
+            //currencyService.AddCurrency("RON");
+            Currency currency = currencyService.getCurrencyById(1);
+            Role role = roleService.GetRoleByName(Constants.ACTIONEER);
+            userService.AddRoleToUser("aa3@aa.a", role);
+
+            auctionService.AddNewAuction(user2, product, currency, 100, DateTime.Now, new DateTime(2015, 10, 18));
+            productAuctionService.AddProductAuction(user1, product, 101, currency);
+
+            bool ok = userService.AddNoteToUser(user1, user2, 1);
+        }
+
+        [TestMethod]
+        public void TestAddNoteTen()
+        {
+            User user1 = new User();
+            user1.FirstName = "AA4";
+            user1.LastName = "AAA4";
+            user1.Email = "aa4@aa.a";
+
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            Category category = categoryService.GetCategoryByName("category");
+
+            Product product = new Product();
+            product.Name = "BBBB4";
+            product.Description = "BBBB4";
+            product.Categories.Add(category);
+
+            userService.AddUser(user1);
+            productService.AddProduct(product);
+            //currencyService.AddCurrency("RON");
+            Currency currency = currencyService.getCurrencyById(1);
+            Role role = roleService.GetRoleByName(Constants.ACTIONEER);
+            userService.AddRoleToUser("aa4@aa.a", role);
+
+            auctionService.AddNewAuction(user2, product, currency, 100, DateTime.Now, new DateTime(2015, 10, 18));
+            productAuctionService.AddProductAuction(user1, product, 101, currency);
+
+            bool ok = userService.AddNoteToUser(user1, user2, 10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void TestAddNoteEleven()
+        {
+            User user1 = new User();
+            user1.FirstName = "AAA5";
+            user1.LastName = "AAA5";
+            user1.Email = "aa5@aa.a";
+
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            Category category = categoryService.GetCategoryByName("category");
+
+            Product product = new Product();
+            product.Name = "BBBB5";
+            product.Description = "BBBB5";
+            product.Categories.Add(category);
+
+            userService.AddUser(user1);
+            productService.AddProduct(product);
+            //currencyService.AddCurrency("RON");
+            Currency currency = currencyService.getCurrencyById(1);
+            Role role = roleService.GetRoleByName(Constants.ACTIONEER);
+            userService.AddRoleToUser("aa5@aa.a", role);
+
+            auctionService.AddNewAuction(user2, product, currency, 100, DateTime.Now, new DateTime(2015, 10, 18));
+            productAuctionService.AddProductAuction(user1, product, 101, currency);
+
+            bool ok = userService.AddNoteToUser(user1, user2, 11);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void TestAddNoteByUserWhichIsNotAuctioneer()
+        {
+            User user1 = new User();
+            user1.FirstName = "AAA7";
+            user1.LastName = "AAA7";
+            user1.Email = "aa7@aa.a";
+
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            Category category = categoryService.GetCategoryByName("category");
+
+            Product product = new Product();
+            product.Name = "BBBB7";
+            product.Description = "BBBB7";
+            product.Categories.Add(category);
+
+            userService.AddUser(user1);
+            productService.AddProduct(product);
+            //currencyService.AddCurrency("RON");
+            Currency currency = currencyService.getCurrencyById(1);
+            
+            auctionService.AddNewAuction(user2, product, currency, 100, DateTime.Now, new DateTime(2015, 10, 18));
+            productAuctionService.AddProductAuction(user1, product, 101, currency);
+
+            bool ok = userService.AddNoteToUser(user1, user2, 11);
+        }
+
+        [TestMethod]
+        public void TestGetRating()
+        {
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+
+            Rating rating = userService.GetRating(user1,user2);
+
+            Assert.AreEqual(10, rating.Grade);
+        }
+
+        [TestMethod]
+        public void UpdateRatingValid()
+        {
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+
+            userService.UpdateRating(user1, user2, 9);
+            Rating rating = userService.GetRating(user1, user2);
+
+            Assert.AreEqual(9, rating.Grade);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void UpdateRatingNegativeNote()
+        {
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+
+            userService.UpdateRating(user1, user2, -9);
+            Rating rating = userService.GetRating(user1, user2);
+
+            Assert.AreEqual(9, rating.Grade);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void UpdateRatingGreateNote()
+        {
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+
+            userService.UpdateRating(user1, user2, 9000);
+            Rating rating = userService.GetRating(user1, user2);
+
+            Assert.AreEqual(9, rating.Grade);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void UpdateRatingFirstUserNull()
+        {
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+
+            userService.UpdateRating(null, user2, 9000);
+            Rating rating = userService.GetRating(user1, user2);
+
+            Assert.AreEqual(9, rating.Grade);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void UpdateRatingSecondUserNull()
+        {
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+
+            userService.UpdateRating(user1, null, 9000);
+            Rating rating = userService.GetRating(user1, user2);
+
+            Assert.AreEqual(9, rating.Grade);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EntityDoesNotExistException))]
+        public void UpdateRatingBothUsersNull()
+        {
+            User user2 = userService.GetUserByEmail("aaa@bbb.com");
+            User user1 = userService.GetUserByEmail("aa@aa.a");
+
+            userService.UpdateRating(null, null, 9000);
+            Rating rating = userService.GetRating(user1, user2);
+
+            Assert.AreEqual(9, rating.Grade);
         }
     }
 }
