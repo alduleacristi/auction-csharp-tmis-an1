@@ -23,19 +23,19 @@ namespace ServiceLayer
         private void VerifyAndSetDefault()
         {
             if(!configs.ContainsKey(Constants.MAX_NR_OF_AUCTION_ASSOCIATE_WITH_CATEGORY))
-                configs.Add(Constants.MAX_NR_OF_AUCTION_ASSOCIATE_WITH_CATEGORY,30);
+                configs.Add(Constants.MAX_NR_OF_AUCTION_ASSOCIATE_WITH_CATEGORY,7);
 
             if (!configs.ContainsKey(Constants.MAX_NR_OF_STARTED_AUCTION))
                 configs.Add(Constants.MAX_NR_OF_STARTED_AUCTION, 90);
 
             if (!configs.ContainsKey(Constants.NR_OF_DAY_BEFORE_RATING_RESET))
-                configs.Add(Constants.NR_OF_DAY_BEFORE_RATING_RESET, 30);
+                configs.Add(Constants.NR_OF_DAY_BEFORE_RATING_RESET, 00);
 
             if (!configs.ContainsKey(Constants.NR_OF_DAYS_USED_TO_DETERMINE_RATING))
                 configs.Add(Constants.NR_OF_DAYS_USED_TO_DETERMINE_RATING, 30);
 
             if (!configs.ContainsKey(Constants.RATING_THRESH_HOLD_FOR_AUCTION))
-                configs.Add(Constants.RATING_THRESH_HOLD_FOR_AUCTION, 4);
+                configs.Add(Constants.RATING_THRESH_HOLD_FOR_AUCTION, 5);
         }
         private ConfigurationService()
         {
