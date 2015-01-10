@@ -54,6 +54,7 @@
     <Compile Include="Auction.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AuctionMetadata.cs" />
     <Compile Include="AuctionModel.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -75,10 +76,12 @@
     <Compile Include="Currency.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExternalAuction.cs" />
     <Compile Include="ExternalCategory.cs" />
     <Compile Include="ExternalProduct.cs" />
-     <Compile Include="ExternalRating.cs" />
-     <Compile Include="ExternalProductAuction.cs" />    <Compile Include="ExternalRole.cs" />
+    <Compile Include="ExternalRating.cs" />
+    <Compile Include="ExternalProductAuction.cs" />
+    <Compile Include="ExternalRole.cs" />
     <Compile Include="ExternalUser.cs" />
     <Compile Include="Product.cs">
       <DependentUpon>AuctionModel.tt</DependentUpon>
